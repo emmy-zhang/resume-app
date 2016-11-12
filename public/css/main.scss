@@ -37,42 +37,67 @@ div.page-header {
   margin: 30px;
 }
 
-.studentDescriptionHome ul li, .recruiterDescriptionHome ul li {
-  font-size: 15px;
+.studentDescriptionHome, .recruiterDescriptionHome,
+.contactRequestsDashboard, .currentContactsDashboard {
+  ul li {
+    font-size: $font-size-base + 2;
+    line-height: $font-size-base + 10;
+  }
 }
 
 .descriptionSections{
-  width: 100%;
   margin: 0 auto;
 }
 
 .studentDescriptionHome {
-  position: relative;
-  height: auto;
-  width: auto;
-  background-color: #007ee5;
+  background-color: #5c4b92;
   color: #ffffff;
   font-family: "Source Sans Pro";
   font-weight: normal;
+  margin: 20px 0 0 0;
   padding: 30px 30px 10px 30px;
-  margin:  0 10px 0 10px;
   border-radius: 15px;
 }
 
 .recruiterDescriptionHome {
-  position: relative;
-  height: auto;
-  width: auto;
   background-color: #babec8;
   color: #ffffff;
   font-family: "Source Sans Pro";
   font-weight: normal;
+  margin: 20px 0 0 0;
   padding: 30px 30px 10px 30px;
-  margin:  0 10px 0 10px;
   border-radius: 15px;
 }
 
+.contactRequestsDashboard {
+  background-color: #5c4b92;
+  color: #ffffff;
+  font-family: "Source Sans Pro";
+  font-weight: normal;
+  margin: 20px 0 0 0;
+  padding: 10px 10px 10px 10px;
+  border-radius: 15px;
+}
 
+.currentContactsDashboard {
+  background-color: #babec8;
+  color: #ffffff;
+  font-family: "Source Sans Pro";
+  font-weight: normal;
+  margin: 20px 0 0 0;
+  padding: 10px 10px 10px 10px;
+  border-radius: 15px;
+}
+
+.skillsDashboard {
+  background-color: #babec8;
+  color: #ffffff;
+  font-family: "Source Sans Pro";
+  font-weight: normal;
+  margin: 20px 0 0 0;
+  padding: 10px 10px 10px 10px;
+  border-radius: 15px;
+}
 // Navbar
 .navbar-default {
     height: $navbar-height;
