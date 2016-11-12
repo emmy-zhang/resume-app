@@ -4,6 +4,7 @@ const compression = require('compression');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
+const lusca = require('lusca');
 const dotenv = require('dotenv');
 const path = require('path');
 const sass = require('node-sass-middleware');
