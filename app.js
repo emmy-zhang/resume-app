@@ -17,7 +17,7 @@ const contactController = require('./controllers/contact');
 const userController = require('./controllers/user');
 
 // Passport config
-//const passportConfig = require('./config/passport');
+const passportConfig = require('./config/passport');
 
 // Create Express server
 const app = express();
@@ -35,7 +35,7 @@ app.get('/signup', userController.getSignup);
 app.post('/signup', userController.postSignup);
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
-//app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
+app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 
 // OAuth authentication routes. (Sign in)
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location'] }));
@@ -46,9 +46,9 @@ app.get('/auth/google', passport.authenticate('google', { scope: 'profile email'
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
     res.redirect(req.session.returnTo || '/');
 });
-app.get('/auth/linkedin', passport.authenticate('linkedin'));
+app.get('/auth/linkedin', passport.authenticate('linkedin', { state: 'SOME STATE' }));
 app.get('/auth/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/login' }), (req, res) => {
-    res.redirect(req.session.returnTo || '/');
+  res.redirect(req.session.returnTo || '/');
 });
 
 // Express config
