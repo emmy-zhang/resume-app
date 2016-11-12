@@ -1,4 +1,14 @@
 footer
     .container.text-center
         p.pull-left
-            | © 2016 Resume App | Made by Emmy and Dan
+            | Made with 
+            i.fa.fa-heart.pink
+            | by 
+            a(href='https://github.com/dan-zheng') Dan 
+            | and 
+            a(href='https://github.com/emmy917917') Emmy
+            |.
+        ul.pull-right.list-inline
+            li(class=(title == 'Contact Us') ? 'active' : undefined)
+                a(href='/contact') Contact Us
+            li © 2016 Resume App 
