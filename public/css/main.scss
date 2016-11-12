@@ -5,3 +5,13 @@
 @import "lib/font-awesome/font-awesome";
 
 @import "themes/modern/modern";
+
+// Footer
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #e7ebf3;
+    background-color: #fff;
+    color: #96a3b6;
+}
