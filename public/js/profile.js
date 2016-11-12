@@ -1,4 +1,4 @@
-$(document).ready(function() {
+/*$(document).ready(function() {
     document.getElementById("submit").onclick = () => {
         const files = document.getElementById('resume').files;
         const file = files[0];
@@ -40,3 +40,4 @@ function uploadFile(file, signedRequest, url) {
     };
     xhr.send(file);
 }
+*/

@@ -3,31 +3,6 @@ const crypto = require('crypto');
 const identicon = require('identicon.js');
 const mongoose = require('mongoose');
 const path = require('path');
-const AWS = require('aws-sdk');
-
-const config = new AWS.Config({
-    accessKeyId: process.env.S3_ID,
-    secretAccessKey: process.env.S3_SECRET,
-    region: process.env.S3_REGION,
-    params: {
-        Bucket: process.env.S3_BUCKET
-    }
-});
-
-const s3 = new AWS.S3(config);
-
-var params = {
-    Bucket: process.env.S3_BUCKET,
-    Key: 'Emmy',
-    Body: 'Hello!'
-};
-
-s3.putObject(params, function(err, data) {
-    if (err)
-        console.log(err);
-    else console.log("Successfully uploaded data to %s/myKey", process.env.S3_BUCKET);
-
-});
 
 const options = {
     discriminatorKey: 'type'
@@ -70,7 +45,7 @@ const userSchema = new mongoose.Schema({
         }
     },
 }, {
-    timestamps: true
+    timestamps: true, options
 });
 
 const applicantSchema = new mongoose.Schema({
@@ -103,7 +78,7 @@ const applicantSchema = new mongoose.Schema({
         }]
     }
 }, {
-    timestamps: true
+    timestamps: true, options
 });
 
 const recruiterSchema = new mongoose.Schema({
@@ -124,7 +99,7 @@ const recruiterSchema = new mongoose.Schema({
         }]
     }
 }, {
-    timestamps: true
+    timestamps: true, options
 });
 
 /**

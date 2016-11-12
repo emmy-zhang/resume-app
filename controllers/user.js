@@ -1,9 +1,13 @@
 const async = require('async');
 const crypto = require('crypto');
+const fs = require('fs');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const AWS = require('aws-sdk');
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+//const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+//const XMLHttpRequest = require('xhr2');
 
 const User = require('../models/User').User;
 
@@ -154,12 +158,18 @@ exports.postUpdateProfile = (req, res, next) => {
         remove_dots: false
     });
 
+    /*if (req.file) {
+        console.log('req.file: ' + req.file);
+        req.assert(req.file, 'Please upload a valid PDF.').isValidPDF();
+    }*/
+
     const errors = req.validationErrors();
 
     if (errors) {
         req.flash('errors', errors);
         return res.redirect('/account');
     }
+    console.log(req.body);
 
     User.findById(req.user.id, (err, user) => {
         if (err) {
@@ -171,64 +181,19 @@ exports.postUpdateProfile = (req, res, next) => {
         user.profile.gender = req.body.gender || '';
         user.profile.location = req.body.location || '';
         user.profile.website = req.body.website || '';
-        /*console.log("yo: " + req.body.resume);
-        if (req.body.resume) {
-            console.log("name: " + req.body.resume.name);
-            console.log("type: " + req.body.resume.type);
-            console.log("name: ${req.body.resume.name}");
-            console.log("type: ${req.body.resume.type}");
-            const config = new AWS.Config({
-                accessKeyId: process.env.S3_ID,
-                secretAccessKey: process.env.S3_SECRET,
-                region: process.env.S3_REGION,
-                params: {
-                    Bucket: process.env.S3_BUCKET
-                }
-            });
 
-            const s3 = new AWS.S3(config);
+        console.log(req.file);
 
-            var params = {
-                Bucket: process.env.S3_BUCKET,
-                Key: 'Emmy',
-                Body: 'Hello!'
-            };
-        }*/
-        if (req.body.resume) {
-            const config = new AWS.Config({
-                accessKeyId: process.env.S3_ID,
-                secretAccessKey: process.env.S3_SECRET,
-                region: process.env.S3_REGION,
-                params: {
-                    Bucket: process.env.S3_BUCKET
-                }
-            });
-
-            const s3 = new AWS.S3(config);
-            const fileName = req.query['file-name'];
-            const fileType = req.query['file-type'];
-
-            const s3Params = {
-                Bucket: process.env.S3_BUCKET,
-                Key: fileName,
-                Expires: 60,
-                ContentType: fileType,
-                ACL: 'public-read'
-            };
-
-            s3.getSignedUrl('putObject', s3Params, (err, data) => {
+        if (req.file) {
+            const filename = req.user.id + "";
+            uploadToS3(req.file, req.user.id, function(err, data) {
+                console.log('data: ' + JSON.stringify(data));
                 if (err) {
-                    console.log(err);
-                    return res.end();
+                    console.error(err);
+                    return res.status(500).send('failed to upload to s3').end();
                 }
-                const returnData = {
-                    signedRequest: data,
-                    url: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${fileName}`
-                };
-                res.write(JSON.stringify(returnData));
-                user.resume = returnData.url;
-                res.end();
-            });
+                user.profile.resume = data.Location;
+            })
         }
         user.save((err) => {
             if (err) {
@@ -248,41 +213,92 @@ exports.postUpdateProfile = (req, res, next) => {
     });
 };
 
+const config = new AWS.Config({
+    accessKeyId: process.env.S3_ID,
+    secretAccessKey: process.env.S3_SECRET,
+    region: process.env.S3_REGION,
+    params: {
+        Bucket: process.env.S3_BUCKET
+    }
+});
+
+const s3 = new AWS.S3(config);
+
+function uploadToS3(file, fileName, callback) {
+    s3.upload({
+            Bucket: process.env.S3_BUCKET,
+            //Body: fs.createReadStream(file.path),
+            Body: file.buffer,
+            Key: fileName.toString(),
+            ContentType: 'application/octet-stream', // force download if it's accessed as a top location
+            ACL: 'public-read'
+        })
+        // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#httpUploadProgress-event
+        // .on('httpUploadProgress', function(evt) { console.log(evt); })
+        // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#send-property
+        .send(callback)
+}
+/*
 exports.signS3 = (req, res, next) => {
-    const config = new AWS.Config({
-        accessKeyId: process.env.S3_ID,
-        secretAccessKey: process.env.S3_SECRET,
-        region: process.env.S3_REGION,
-        params: {
-            Bucket: process.env.S3_BUCKET
-        }
-    });
-
-    const s3 = new AWS.S3(config);
-    const fileName = req.query['file-name'];
-    const fileType = req.query['file-type'];
-
-    const s3Params = {
-        Bucket: process.env.S3_BUCKET,
-        Key: fileName,
-        Expires: 60,
-        ContentType: fileType,
-        ACL: 'public-read'
-    };
-
-    s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    //console.log(req);
+    User.findById(req.user.id, (err, user) => {
+        console.log("user: " + user);
         if (err) {
-            console.log(err);
-            return res.end();
+            return next(err);
         }
-        const returnData = {
-            signedRequest: data,
-            url: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${fileName}`
+        const config = new AWS.Config({
+            accessKeyId: process.env.S3_ID,
+            secretAccessKey: process.env.S3_SECRET,
+            region: process.env.S3_REGION,
+            params: {
+                Bucket: process.env.S3_BUCKET
+            }
+        });
+
+        const s3 = new AWS.S3(config);
+        const fileName = req.query['file-name'];
+        const fileType = req.query['file-type'];
+
+        const s3Params = {
+            Bucket: process.env.S3_BUCKET,
+            Key: fileName,
+            Expires: 60,
+            ContentType: fileType,
+            ACL: 'public-read'
         };
-        res.write(JSON.stringify(returnData));
-        res.end();
+
+        s3.getSignedUrl('putObject', s3Params, (err, data) => {
+            if (err) {
+                console.log(err);
+                return res.end();
+            }
+            const returnData = {
+                signedRequest: data,
+                url: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${fileName}`
+            };
+            user.profile.resume = returnData.url;
+            res.write(JSON.stringify(returnData));
+        });
+        user.save((err) => {
+            if (err) {
+                if (err.code === 11000) {
+                    req.flash('errors', {
+                        msg: 'The email address you have entered is already associated with an account.'
+                    });
+                    return res.redirect('/account');
+                }
+                return next(err);
+            }
+
+            req.flash('success', {
+                msg: 'Profile information has been updated.'
+            });
+            res.redirect('/account');
+
+            res.end();
+        });
     });
-};
+};*/
 
 /**
  * POST /account/password

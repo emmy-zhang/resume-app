@@ -13,9 +13,17 @@ const flash = require('express-flash');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const expressValidator = require('express-validator');
+const multer = require('multer');
+const upload = multer({
+    limits: {
+        fileSize: 10 * 1024 * 1024
+    }
+});
 
 // Load environmental variables from .env
-dotenv.load({ path: '.env' });
+dotenv.load({
+    path: '.env'
+});
 
 // Controllers
 const homeController = require('./controllers/home');
@@ -46,8 +54,16 @@ app.use(sass({
 }));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(expressValidator());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(expressValidator({
+    customValidators: {
+        isValidPDF: function(file) {
+            return file.mimetype && file.mimetype === 'application/pdf';
+        }
+    }
+}));
 app.use(session({
     resave: true,
     saveUninitialized: true,
@@ -60,13 +76,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use((req, res, next) => {
-    if (req.path === '/api/upload') {
+/*app.use((req, res, next) => {
+    if (req.path === '/account/profile') {
         next();
     } else {
         lusca.csrf()(req, res, next);
     }
-});
+});*/
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.use((req, res, next) => {
@@ -76,15 +92,17 @@ app.use((req, res, next) => {
 app.use(function(req, res, next) {
     // After successful login, redirect back to the intended page
     if (!req.user &&
-            req.path !== '/login' &&
-            req.path !== '/signup' &&
-            !req.path.match(/^\/auth/) &&
-            !req.path.match(/\./)) {
+        req.path !== '/login' &&
+        req.path !== '/signup' &&
+        !req.path.match(/^\/auth/) &&
+        !req.path.match(/\./)) {
         req.session.returnTo = req.path;
     }
     next();
 });
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: 31557600000
+}));
 
 // App routes
 app.get('/', homeController.index);
@@ -100,24 +118,36 @@ app.post('/signup', userController.postSignup);
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
-app.post('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
-app.get('/account/sign-s3', passportConfig.isAuthenticated, userController.signS3);
+app.post('/account/profile', passportConfig.isAuthenticated, upload.single('resume'), userController.postUpdateProfile);
+//app.get('/account/sign-s3', passportConfig.isAuthenticated, userController.signS3);
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
 // OAuth authentication routes. (Sign in)
-app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location'] }));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
+app.get('/auth/facebook', passport.authenticate('facebook', {
+    scope: ['email', 'user_location']
+}));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+    failureRedirect: '/login'
+}), (req, res) => {
     res.redirect(req.session.returnTo || '/');
 });
-app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+app.get('/auth/google', passport.authenticate('google', {
+    scope: 'profile email'
+}));
+app.get('/auth/google/callback', passport.authenticate('google', {
+    failureRedirect: '/login'
+}), (req, res) => {
     res.redirect(req.session.returnTo || '/');
 });
-app.get('/auth/linkedin', passport.authenticate('linkedin', { state: 'SOME STATE' }));
-app.get('/auth/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
+app.get('/auth/linkedin', passport.authenticate('linkedin', {
+    state: 'SOME STATE'
+}));
+app.get('/auth/linkedin/callback', passport.authenticate('linkedin', {
+    failureRedirect: '/login'
+}), (req, res) => {
+    res.redirect(req.session.returnTo || '/');
 });
 
 // Start Express server
