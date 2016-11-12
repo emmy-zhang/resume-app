@@ -6,9 +6,71 @@
 
 @import "themes/modern/modern";
 
-// body
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
-    padding: 63px 0 0 0;
+    padding-top: $navbar-height + 10px;
+    margin-bottom: 75px;
+}
+
+// Navbar
+.navbar-default {
+    height: $navbar-height;
+    background-color: #fff;
+    .container {
+        height: inherit;
+    }
+    .navbar-header {
+        height: inherit !important;
+    }
+    .navbar-brand {
+		position: absolute;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        color: #5c4b92;
+        font-family: $navbar-brand-font-family;
+        font-weight: bold;
+        font-size: $navbar-default-brand-size;
+        height: $navbar-height;
+		white-space: nowrap;
+        overflow: hidden;
+
+        img {
+            display: inline-block;
+            vertical-align: middle;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            padding-right: 12px;
+        }
+
+        span {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: $navbar-default-brand-size;
+            padding-top: 20px;
+            padding-bottom: 16px;
+        }
+    }
+    .navbar-nav {
+        > li > a {
+            color: #444;
+        }
+        // Avatar
+        > li > a > img {
+            height: 30px;
+            width: 30px;
+            margin: -15px 15px -15px;
+        }
+    }
+    .navbar-collapse {
+        background-color: #fff;
+    }
+	.navbar-toggle {
+        z-index: 1;
+    }
 }
 
 // Footer
@@ -19,10 +81,12 @@ footer {
     border-top: 1px solid #e7ebf3;
     background-color: #fff;
     color: #96a3b6;
-}
 
-footer p {
-  margin: 5.5px 0 5.5px 0;
+    .container {
+        padding-top: 14px;
+        padding-right: 14px;
+        vertical-align: middle;
+    }
 }
 
 // Font Awesome
