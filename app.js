@@ -101,6 +101,7 @@ app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
+app.get('/account/sign-s3', passportConfig.isAuthenticated, userController.signS3);
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);

@@ -2,6 +2,7 @@ const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
+const AWS = require('AWS-sdk');
 
 const User = require('../models/User');
 
@@ -25,7 +26,9 @@ exports.getLogin = (req, res) => {
 exports.postLogin = (req, res, next) => {
     req.assert('email', 'Email is not valid.').isEmail();
     req.assert('password', 'Password cannot be blank.').notEmpty();
-    req.sanitize('email').normalizeEmail({ remove_dots: false });
+    req.sanitize('email').normalizeEmail({
+        remove_dots: false
+    });
 
     const errors = req.validationErrors();
 
@@ -35,14 +38,20 @@ exports.postLogin = (req, res, next) => {
     }
 
     passport.authenticate('local', (err, user, info) => {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         if (!user) {
             req.flash('errors', info);
             return res.redirect('/login');
         }
         req.logIn(user, (err) => {
-            if (err) { return next(err); }
-            req.flash('success', { msg: 'Success! You are logged in.' });
+            if (err) {
+                return next(err);
+            }
+            req.flash('success', {
+                msg: 'Success! You are logged in.'
+            });
             res.redirect(req.session.returnTo || '/');
         });
     })(req, res, next);
@@ -78,7 +87,9 @@ exports.postSignup = (req, res, next) => {
     req.assert('email', 'Email is not valid.').isEmail();
     req.assert('password', 'Password must be at least 4 characters long.').len(4);
     req.assert('confirmPassword', 'Passwords do not match.').equals(req.body.password);
-    req.sanitize('email').normalizeEmail({ remove_dots: false });
+    req.sanitize('email').normalizeEmail({
+        remove_dots: false
+    });
 
     const errors = req.validationErrors();
 
@@ -96,13 +107,19 @@ exports.postSignup = (req, res, next) => {
         password: req.body.password
     });
 
-    User.findOne({ email: req.body.email }, (err, existingUser) => {
+    User.findOne({
+        email: req.body.email
+    }, (err, existingUser) => {
         if (existingUser) {
-            req.flash('errors', { msg: 'Account with that email address already exists.' });
+            req.flash('errors', {
+                msg: 'Account with that email address already exists.'
+            });
             return res.redirect('/signup');
         }
         user.save((err) => {
-            if (err) { return next(err); }
+            if (err) {
+                return next(err);
+            }
             req.logIn(user, (err) => {
                 if (err) {
                     return next(err);
@@ -129,8 +146,12 @@ exports.getAccount = (req, res) => {
  */
 exports.postUpdateProfile = (req, res, next) => {
     req.assert('email', 'Please enter a valid email address.').isEmail();
-    req.assert('website', 'Please enter a valid URL.').optional({ checkFalsy: true }).isURL();
-    req.sanitize('email').normalizeEmail({ remove_dots: false });
+    req.assert('website', 'Please enter a valid URL.').optional({
+        checkFalsy: true
+    }).isURL();
+    req.sanitize('email').normalizeEmail({
+        remove_dots: false
+    });
 
     const errors = req.validationErrors();
 
@@ -140,24 +161,89 @@ exports.postUpdateProfile = (req, res, next) => {
     }
 
     User.findById(req.user.id, (err, user) => {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         user.email = req.body.email || '';
         user.profile.firstName = req.body.firstName || '';
         user.profile.lastName = req.body.lastName || '';
         user.profile.gender = req.body.gender || '';
         user.profile.location = req.body.location || '';
         user.profile.website = req.body.website || '';
+        /*console.log("yo: " + req.body.resume);
+        if (req.body.resume) {
+            console.log("name: " + req.body.resume.name);
+            console.log("type: " + req.body.resume.type);
+            console.log("name: ${req.body.resume.name}");
+            console.log("type: ${req.body.resume.type}");
+            const config = new AWS.Config({
+                accessKeyId: process.env.S3_ID,
+                secretAccessKey: process.env.S3_SECRET,
+                region: process.env.S3_REGION,
+                params: {
+                    Bucket: process.env.S3_BUCKET
+                }
+            });
+
+            const s3 = new AWS.S3(config);
+
+            var params = {
+                Bucket: process.env.S3_BUCKET,
+                Key: 'Emmy',
+                Body: 'Hello!'
+            };
+        }*/
         user.save((err) => {
             if (err) {
                 if (err.code === 11000) {
-                    req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
+                    req.flash('errors', {
+                        msg: 'The email address you have entered is already associated with an account.'
+                    });
                     return res.redirect('/account');
                 }
                 return next(err);
             }
-            req.flash('success', { msg: 'Profile information has been updated.' });
+            req.flash('success', {
+                msg: 'Profile information has been updated.'
+            });
             res.redirect('/account');
         });
+    });
+};
+
+exports.signS3 = (req, res, next) => {
+    const config = new AWS.Config({
+        accessKeyId: process.env.S3_ID,
+        secretAccessKey: process.env.S3_SECRET,
+        region: process.env.S3_REGION,
+        params: {
+            Bucket: process.env.S3_BUCKET
+        }
+    });
+
+    const s3 = new AWS.S3(config);
+    const fileName = req.query['file-name'];
+    const fileType = req.query['file-type'];
+
+    const s3Params = {
+        Bucket: process.env.S3_BUCKET,
+        Key: fileName,
+        Expires: 60,
+        ContentType: fileType,
+        ACL: 'public-read'
+    };
+
+    s3.getSignedUrl('putObject', s3Params, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.end();
+        }
+        const returnData = {
+            signedRequest: data,
+            url: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${fileName}`
+        };
+        res.write(JSON.stringify(returnData));
+        res.end();
     });
 };
 
@@ -177,11 +263,17 @@ exports.postUpdatePassword = (req, res, next) => {
     }
 
     User.findById(req.user.id, (err, user) => {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         user.password = req.body.password;
         user.save((err) => {
-            if (err) { return next(err); }
-            req.flash('success', { msg: 'Password has been changed.' });
+            if (err) {
+                return next(err);
+            }
+            req.flash('success', {
+                msg: 'Password has been changed.'
+            });
             res.redirect('/account');
         });
     });
@@ -192,10 +284,16 @@ exports.postUpdatePassword = (req, res, next) => {
  * Delete user account.
  */
 exports.postDeleteAccount = (req, res, next) => {
-    User.remove({ _id: req.user.id }, (err) => {
-        if (err) { return next(err); }
+    User.remove({
+        _id: req.user.id
+    }, (err) => {
+        if (err) {
+            return next(err);
+        }
         req.logout();
-        req.flash('info', { msg: 'Your account has been deleted.' });
+        req.flash('info', {
+            msg: 'Your account has been deleted.'
+        });
         res.redirect('/');
     });
 };
@@ -207,13 +305,19 @@ exports.postDeleteAccount = (req, res, next) => {
 exports.getOauthUnlink = (req, res, next) => {
     const provider = req.params.provider;
     User.findById(req.user.id, (err, user) => {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         user[provider] = undefined;
         user.tokens = user.tokens.filter(token => token.kind !== provider);
-		const providerFormatted = provider.charAt(0).toUpperCase() + provider.slice(1);
+        const providerFormatted = provider.charAt(0).toUpperCase() + provider.slice(1);
         user.save((err) => {
-            if (err) { return next(err); }
-            req.flash('info', { msg: `${providerFormatted} account has been unlinked.` });
+            if (err) {
+                return next(err);
+            }
+            req.flash('info', {
+                msg: `${providerFormatted} account has been unlinked.`
+            });
             res.redirect('/account');
         });
     });
@@ -228,12 +332,18 @@ exports.getReset = (req, res, next) => {
         return res.redirect('/');
     }
     User
-        .findOne({ passwordResetToken: req.params.token })
+        .findOne({
+            passwordResetToken: req.params.token
+        })
         .where('passwordResetExpires').gt(Date.now())
         .exec((err, user) => {
-            if (err) { return next(err); }
+            if (err) {
+                return next(err);
+            }
             if (!user) {
-                req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
+                req.flash('errors', {
+                    msg: 'Password reset token is invalid or has expired.'
+                });
                 return res.redirect('/forgot');
             }
             res.render('account/reset', {
@@ -258,28 +368,36 @@ exports.postReset = (req, res, next) => {
     }
 
     async.waterfall([
-        function (done) {
+        function(done) {
             User
-                .findOne({ passwordResetToken: req.params.token })
+                .findOne({
+                    passwordResetToken: req.params.token
+                })
                 .where('passwordResetExpires').gt(Date.now())
                 .exec((err, user) => {
-                    if (err) { return next(err); }
+                    if (err) {
+                        return next(err);
+                    }
                     if (!user) {
-                        req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
+                        req.flash('errors', {
+                            msg: 'Password reset token is invalid or has expired.'
+                        });
                         return res.redirect('back');
                     }
                     user.password = req.body.password;
                     user.passwordResetToken = undefined;
                     user.passwordResetExpires = undefined;
                     user.save((err) => {
-                        if (err) { return next(err); }
+                        if (err) {
+                            return next(err);
+                        }
                         req.logIn(user, (err) => {
                             done(err, user);
                         });
                     });
                 });
         },
-        function (user, done) {
+        function(user, done) {
             const transporter = nodemailer.createTransport({
                 service: 'SendGrid',
                 auth: {
@@ -294,12 +412,16 @@ exports.postReset = (req, res, next) => {
                 text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n`
             };
             transporter.sendMail(mailOptions, (err) => {
-                req.flash('success', { msg: 'Success! Your password has been changed.' });
+                req.flash('success', {
+                    msg: 'Success! Your password has been changed.'
+                });
                 done(err);
             });
         }
     ], (err) => {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         res.redirect('/');
     });
 };
@@ -323,7 +445,9 @@ exports.getForgot = (req, res) => {
  */
 exports.postForgot = (req, res, next) => {
     req.assert('email', 'Please enter a valid email address.').isEmail();
-    req.sanitize('email').normalizeEmail({ remove_dots: false });
+    req.sanitize('email').normalizeEmail({
+        remove_dots: false
+    });
 
     const errors = req.validationErrors();
 
@@ -333,16 +457,20 @@ exports.postForgot = (req, res, next) => {
     }
 
     async.waterfall([
-        function (done) {
+        function(done) {
             crypto.randomBytes(16, (err, buf) => {
                 const token = buf.toString('hex');
                 done(err, token);
             });
         },
-        function (token, done) {
-            User.findOne({ email: req.body.email }, (err, user) => {
+        function(token, done) {
+            User.findOne({
+                email: req.body.email
+            }, (err, user) => {
                 if (!user) {
-                    req.flash('errors', { msg: 'Account with that email address does not exist.' });
+                    req.flash('errors', {
+                        msg: 'Account with that email address does not exist.'
+                    });
                     return res.redirect('/forgot');
                 }
                 user.passwordResetToken = token;
@@ -352,7 +480,7 @@ exports.postForgot = (req, res, next) => {
                 });
             });
         },
-        function (token, user, done) {
+        function(token, user, done) {
             const transporter = nodemailer.createTransport({
                 service: 'SendGrid',
                 auth: {
@@ -370,12 +498,16 @@ exports.postForgot = (req, res, next) => {
                     If you did not request this, please ignore this email and your password will remain unchanged.\n`
             };
             transporter.sendMail(mailOptions, (err) => {
-                req.flash('info', { msg: `An e-mail has been sent to ${user.email} with further instructions.` });
+                req.flash('info', {
+                    msg: `An e-mail has been sent to ${user.email} with further instructions.`
+                });
                 done(err);
             });
         }
     ], (err) => {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         res.redirect('/forgot');
     });
 };
