@@ -2,7 +2,7 @@ const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
-const AWS = require('AWS-sdk');
+const AWS = require('aws-sdk');
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const User = require('../models/User').User;
