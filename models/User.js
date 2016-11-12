@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-const studentSchema = new mongoose.Scheme({
+const studentSchema = new mongoose.Schema({
     profile: {
         major: { type: String, default: '' },
         graduationYear: { type: String, default: '' },
