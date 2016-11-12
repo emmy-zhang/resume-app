@@ -6,33 +6,40 @@ block content
         div.contentHome.container-fluid
           h1.text-center Spend more time connecting and less time with papers
           h2.text-center A resume sharing web app that allows:
-          div.row.descriptionSections
-            div.studentDescriptionHome.col-md-6
-              h2.text-center Students
-              ul
-                li To upload your resume and display your skills
-                li To discover companies that fit your skillsets and interests
-                li To find more information about companies and their hiring needs
-
-            div.recruiterDescriptionHome.col-md-6
-              h2.text-center Recruiter
-              ul
-                li To upload your company profile and career opportunities
-                li To reach students who have similar skillsets to the job needs
-                li To easily find matches to students based on resume information
+        .col-md-5.col-md-offset-1
+          div.studentDescriptionHome
+            h2.text-center Students
+            ul
+              li To upload your resume and display your skills
+              li To discover companies that fit your skillsets and interests
+              li To find more information about companies and their hiring needs
+        .col-md-5
+          div.recruiterDescriptionHome
+            h2.text-center Recruiters
+            ul
+              li To upload your company profile and career opportunities
+              li To reach students who have similar skillsets to the job needs
+              li To easily find matches to students based on resume information
        else
-          div.contentHome.container-fluid
-            div.row
-              div.studentSection
-                h1.text-center Welcome, #{user.profile.firstName}!
-                h2.text-center Checkout your updated dashboard:
-                div.studentDescriptionHome.col-md-6
-                  h2.text-center You currently have {{2}} Company Matches
-                  ul
-                    li {{Company One}}
-                    li {{Company Two}}
-              div.recruiterSection
-                div.recruiterDescriptionHome.col-md-6
-                  h2.text-center Current Company Contacts:
-                  ul
-                    li {{Company Name}} {{Recruiter Name}}
+         div.contentHome.container-fluid
+           h1.text-center Welcome, #{user.profile.firstName}!
+           h2.text-center Checkout your updated dashboard:
+         div
+           .col-md-5.col-md-offset-1
+             div.contactRequestsDashboard
+               h2.text-center New contact requests:
+               ul
+                 li {Company Name} {Recruiter} {Company Match Percentage}
+                  button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                 li {Company Name} {Recruiter} {Company Match Percentage}
+                  button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+           .col-md-5
+             div.currentContactsDashboard
+               h2.text-center Current Contacts
+               ul
+                 li {Company Name} {Recruiter} {Company Match Percentage}
+                  button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                 li {Company Name} {Recruiter} {Company Match Percentage}
+                  button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                 li {Company Name} {Recruiter} {Company Match Percentage}
+                  button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
