@@ -21,7 +21,7 @@ body {
 #main {
   width: 100%;
   min-height: 100%;
-  margin-bottom: 42px;
+  padding: 0 0 42px 0;
 }
 
 #other {
@@ -37,26 +37,38 @@ div.page-header {
   margin: 30px;
 }
 
+.studentDescriptionHome ul li, .recruiterDescriptionHome ul li {
+  font-size: 15px;
+}
+
+.descriptionSections{
+  width: 100%;
+  margin: 0 auto;
+}
+
 .studentDescriptionHome {
   position: relative;
-  height: 300px;
+  height: auto;
+  width: auto;
   background-color: #007ee5;
   color: #ffffff;
   font-family: "Source Sans Pro";
   font-weight: normal;
-  padding: 30px;
-  margin: 10px;
+  padding: 30px 30px 10px 30px;
+  margin:  0 10px 0 10px;
   border-radius: 15px;
 }
+
 .recruiterDescriptionHome {
   position: relative;
-  height: 300px;
+  height: auto;
+  width: auto;
   background-color: #babec8;
   color: #ffffff;
   font-family: "Source Sans Pro";
   font-weight: normal;
-  padding: 30px;
-  margin: 10px;
+  padding: 30px 30px 10px 30px;
+  margin:  0 10px 0 10px;
   border-radius: 15px;
 }
 
