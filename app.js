@@ -7,15 +7,35 @@ const logger = require('morgan');
 const dotenv = require('dotenv');
 const path = require('path');
 const sass = require('node-sass-middleware');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const expressValidator = require('express-validator');
 
 // Controllers
 const homeController = require('./controllers/home');
+const contactController = require('./controllers/contact');
+const userController = require('./controllers/user');
+
+// Passport config
+//const passportConfig = require('./config/passport');
 
 // Create Express server
 const app = express();
 
 // App routes
 app.get('/', homeController.index);
+app.get('/login', userController.getLogin);
+app.post('/login', userController.postLogin);
+app.get('/logout', userController.logout);
+app.get('/forgot', userController.getForgot);
+app.post('/forgot', userController.postForgot);
+app.get('/reset/:token', userController.getReset);
+app.post('/reset/:token', userController.postReset);
+app.get('/signup', userController.getSignup);
+app.post('/signup', userController.postSignup);
+app.get('/contact', contactController.getContact);
+app.post('/contact', contactController.postContact);
+//app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 
 // Express config
 app.set('port', process.env.PORT || 3000);

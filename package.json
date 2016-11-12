@@ -4,21 +4,34 @@
   "description": "A resume-sharing app.",
   "main": "app.js",
   "scripts": {
-	"start": "node app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": "https://github.com/emmy917917/resume-app",
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
     "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
+    "express-validator": "^2.21.0",
+    "identicon.js": "^1.3.0",
     "jade": "^1.11.0",
+    "lodash": "^4.16.6",
+    "mongoose": "^4.6.7",
     "morgan": "^1.7.0",
     "node-sass-middleware": "^0.10.0",
+    "nodemailer": "^2.6.4",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
+    "passport-github": "^1.1.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-oauth": "^1.0.0",
+    "passport-openid": "^0.4.0",
     "path": "^0.12.7"
   }
 }

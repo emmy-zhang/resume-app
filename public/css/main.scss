@@ -6,6 +6,11 @@
 
 @import "themes/modern/modern";
 
+// body
+body {
+    padding: 63px 0 0 0;
+}
+
 // Footer
 footer {
     position: absolute;
@@ -14,4 +19,9 @@ footer {
     border-top: 1px solid #e7ebf3;
     background-color: #fff;
     color: #96a3b6;
+}
+
+// Font Awesome
+.fa {
+    margin-right: 6px;
 }
