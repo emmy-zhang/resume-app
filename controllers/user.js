@@ -6,10 +6,21 @@ const passport = require('passport');
 const AWS = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-//const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-//const XMLHttpRequest = require('xhr2');
 
 const User = require('../models/User').User;
+const Applicant = require('../models/User').Applicant;
+const Recruiter = require('../models/User').Recruiter;
+
+const config = new AWS.Config({
+    accessKeyId: process.env.S3_ID,
+    secretAccessKey: process.env.S3_SECRET,
+    region: process.env.S3_REGION,
+    params: {
+        Bucket: process.env.S3_BUCKET
+    }
+});
+
+const s3 = new AWS.S3(config);
 
 /**
  * GET /login
@@ -103,14 +114,26 @@ exports.postSignup = (req, res, next) => {
         return res.redirect('/signup');
     }
 
-    const user = new User({
-        profile: {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName
-        },
-        email: req.body.email,
-        password: req.body.password
-    });
+    var user;
+    if (req.body.type == 'recruiter') {
+        user = new Recruiter({
+            profile: {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName
+            },
+            email: req.body.email,
+            password: req.body.password
+        });
+    } else {
+        user = new Applicant({
+            profile: {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName
+            },
+            email: req.body.email,
+            password: req.body.password
+        });
+    }
 
     User.findOne({
         email: req.body.email
@@ -172,6 +195,8 @@ exports.postUpdateProfile = (req, res, next) => {
     console.log(req.body);
 
     User.findById(req.user.id, (err, user) => {
+        console.log(user.email);
+        console.log(user.profile.resume);
         if (err) {
             return next(err);
         }
@@ -190,39 +215,44 @@ exports.postUpdateProfile = (req, res, next) => {
                 console.log('data: ' + JSON.stringify(data));
                 if (err) {
                     console.error(err);
-                    return res.status(500).send('failed to upload to s3').end();
+                    return res.status(500).send('Failed to upload to S3.').end();
                 }
                 user.profile.resume = data.Location;
-            })
-        }
-        user.save((err) => {
-            if (err) {
-                if (err.code === 11000) {
-                    req.flash('errors', {
-                        msg: 'The email address you have entered is already associated with an account.'
+                user.save((err) => {
+                    if (err) {
+                        if (err.code === 11000) {
+                            req.flash('errors', {
+                                msg: 'The email address you have entered is already associated with an account.'
+                            });
+                            return res.redirect('/account');
+                        }
+                        return next(err);
+                    }
+                    req.flash('success', {
+                        msg: 'Profile information has been updated.'
                     });
-                    return res.redirect('/account');
-                }
-                return next(err);
-            }
-            req.flash('success', {
-                msg: 'Profile information has been updated.'
+                    res.redirect('/account');
+                });
             });
-            res.redirect('/account');
-        });
+        } else {
+            user.save((err) => {
+                if (err) {
+                    if (err.code === 11000) {
+                        req.flash('errors', {
+                            msg: 'The email address you have entered is already associated with an account.'
+                        });
+                        return res.redirect('/account');
+                    }
+                    return next(err);
+                }
+                req.flash('success', {
+                    msg: 'Profile information has been updated.'
+                });
+                res.redirect('/account');
+            });
+        }
     });
 };
-
-const config = new AWS.Config({
-    accessKeyId: process.env.S3_ID,
-    secretAccessKey: process.env.S3_SECRET,
-    region: process.env.S3_REGION,
-    params: {
-        Bucket: process.env.S3_BUCKET
-    }
-});
-
-const s3 = new AWS.S3(config);
 
 function uploadToS3(file, fileName, callback) {
     s3.upload({
@@ -236,7 +266,7 @@ function uploadToS3(file, fileName, callback) {
         // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#httpUploadProgress-event
         // .on('httpUploadProgress', function(evt) { console.log(evt); })
         // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#send-property
-        .send(callback)
+        .send(callback);
 }
 /*
 exports.signS3 = (req, res, next) => {

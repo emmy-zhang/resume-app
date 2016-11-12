@@ -37,6 +37,8 @@ block content
         .form-group
             label.col-sm-3.control-label(for='resume') Resume
             .col-sm-4
+                if user.profile.resume
+                    a(href='#{user.profile.resume}') Last uploaded resume
                 input.form-control-file(type='file', name='resume', id='resume')
                 input(type='hidden', name='resume-url', id='resume-url')
                 small(id='resume-info')
