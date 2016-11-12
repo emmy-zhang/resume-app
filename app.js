@@ -11,6 +11,9 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const expressValidator = require('express-validator');
 
+// Load environmental variables from .env
+dotenv.load({ path: '.env' });
+
 // Controllers
 const homeController = require('./controllers/home');
 const contactController = require('./controllers/contact');
