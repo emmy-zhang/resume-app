@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const identicon = require('identicon.js');
 const mongoose = require('mongoose');
 const path = require('path');
-const AWS = require('AWS-sdk');
+const AWS = require('aws-sdk');
 
 const config = new AWS.Config({
     accessKeyId: process.env.S3_ID,
