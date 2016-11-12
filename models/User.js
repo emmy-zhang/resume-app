@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const identicon = require('identicon.js');
 const mongoose = require('mongoose');
 
+const options = { discriminatorKey: 'type'};
+
 const userSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: String,
@@ -17,12 +19,23 @@ const userSchema = new mongoose.Schema({
     profile: {
         firstName: { type: String, default: '' },
         lastName: { type: String, default: '' },
-        gender: { type: String, default: '' },
         location: { type: String, default: '' },
         website: { type: String, default: '' },
         picture: { type: String, default: '' }
     },
 
+}, { timestamps: true });
+
+const studentSchema = new mongoose.Scheme({
+    profile: {
+        major: { type: String, default: '' },
+        graduationYear: { type: String, default: '' },
+        degree: { type: String, default: '' },
+        school: { type: String, default: '' },
+        resume: { type: String, default: '' },
+        skills: [{ type: String }],
+        interests: [{ type: String }]
+    }
 }, { timestamps: true });
 
 /**
