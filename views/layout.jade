@@ -8,11 +8,15 @@ html
         meta(name='csrf-token', content=_csrf)
         title #{title} - Resume App
         link(rel='stylesheet', type='text/css', href='/css/main.css')
-    
+
     include partials/header
-    
-    .container
-        block content
+
+    if(title == 'Home')
+      .container#main
+          block content
+    else
+      .container 
+          block content
 
     include partials/footer
 
