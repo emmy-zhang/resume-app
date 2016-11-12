@@ -23,7 +23,20 @@
     src: url("../../fonts/uni-sans-heavy.otf");
     font-weight: bold;
 };
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900');
+@font-face {
+    font-family: "Source Sans Pro";
+    src: url("../../fonts/source-sans-pro/SourceSansPro-Regular.otf");
+}
+@font-face {
+    font-family: "Source Sans Pro";
+    src: url("../../fonts/source-sans-pro/SourceSansPro-Bold.otf");
+    font-weight: bold;
+};
+@font-face {
+    font-family: "Source Sans Pro";
+    src: url("../../fonts/source-sans-pro/SourceSansPro-Light.otf");
+    font-weight: thin;
+};
 @import 'https://fonts.googleapis.com/css?family=Roboto:100,300,700';
 // Colors
 // -------------------------
@@ -49,8 +62,8 @@ $font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace !defau
 $font-family-base: $font-family-sans-serif !default;
 
 $font-size-base: 13px;
-$headings-font-family: "Uni Sans", sans-serif;
-$headings-font-weight: normal;
+$headings-font-family: "Source Sans Pro";
+$headings-font-weight: bold;
 $text-color: $gray-darker;
 $link-color: $brand-primary;
 $link-hover-color: $gray-darker;
@@ -60,6 +73,10 @@ $title-font-family: "Roboto";
 $title-font-size: 72px;
 $subtitle-font-family: "Roboto";
 $subtitle-font-size: 30px;
+
+
+// home description boxes
+// -------------------------
 
 // Dropdowns
 // -------------------------
