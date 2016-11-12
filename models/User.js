@@ -2,11 +2,42 @@ const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 const identicon = require('identicon.js');
 const mongoose = require('mongoose');
+const path = require('path');
+const AWS = require('AWS-sdk');
 
-const options = { discriminatorKey: 'type'};
+const config = new AWS.Config({
+    accessKeyId: process.env.S3_ID,
+    secretAccessKey: process.env.S3_SECRET,
+    region: process.env.S3_REGION,
+    params: {
+        Bucket: process.env.S3_BUCKET
+    }
+});
+
+const s3 = new AWS.S3(config);
+
+var params = {
+    Bucket: process.env.S3_BUCKET,
+    Key: 'Emmy',
+    Body: 'Hello!'
+};
+
+s3.putObject(params, function(err, data) {
+    if (err)
+        console.log(err);
+    else console.log("Successfully uploaded data to %s/myKey", process.env.S3_BUCKET);
+
+});
+
+const options = {
+    discriminatorKey: 'type'
+};
 
 const userSchema = new mongoose.Schema({
-    email: { type: String, unique: true },
+    email: {
+        type: String,
+        unique: true
+    },
     password: String,
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -17,37 +48,81 @@ const userSchema = new mongoose.Schema({
     tokens: Array,
 
     profile: {
-        firstName: { type: String, default: '' },
-        lastName: { type: String, default: '' },
-        location: { type: String, default: '' },
-        website: { type: String, default: '' },
-        picture: { type: String, default: '' }
+        firstName: {
+            type: String,
+            default: ''
+        },
+        lastName: {
+            type: String,
+            default: ''
+        },
+        location: {
+            type: String,
+            default: ''
+        },
+        website: {
+            type: String,
+            default: ''
+        },
+        picture: {
+            type: String,
+            default: ''
+        }
     },
 
-}, { timestamps: true });
+}, {
+    timestamps: true
+});
 
 const studentSchema = new mongoose.Schema({
     profile: {
-        major: { type: String, default: '' },
-        graduationYear: { type: String, default: '' },
-        degree: { type: String, default: '' },
-        school: { type: String, default: '' },
-        resume: { type: String, default: '' },
-        skills: [{ type: String }],
-        interests: [{ type: String }]
+        major: {
+            type: String,
+            default: ''
+        },
+        graduationYear: {
+            type: String,
+            default: ''
+        },
+        degree: {
+            type: String,
+            default: ''
+        },
+        school: {
+            type: String,
+            default: ''
+        },
+        resume: {
+            type: String,
+            default: ''
+        },
+        skills: [{
+            type: String
+        }],
+        interests: [{
+            type: String
+        }]
     }
-}, { timestamps: true });
+}, {
+    timestamps: true
+});
 
 /**
  * Password hash middleware.
  */
-userSchema.pre('save', function (next) {
+userSchema.pre('save', function(next) {
     const user = this;
-    if (!user.isModified('password')) { return next(); }
+    if (!user.isModified('password')) {
+        return next();
+    }
     bcrypt.genSalt(10, (err, salt) => {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         bcrypt.hash(user.password, salt, null, (err, hash) => {
-            if (err) { return next(err); }
+            if (err) {
+                return next(err);
+            }
             user.password = hash;
             next();
         });
@@ -57,7 +132,7 @@ userSchema.pre('save', function (next) {
 /**
  * Helper method for validating user's password.
  */
-userSchema.methods.comparePassword = function (candidatePassword, cb) {
+userSchema.methods.comparePassword = function(candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
         cb(err, isMatch);
     });
@@ -66,7 +141,7 @@ userSchema.methods.comparePassword = function (candidatePassword, cb) {
 /**
  * Helper method for getting user's identicon.
  */
-userSchema.methods.identicon = function (size) {
+userSchema.methods.identicon = function(size) {
     if (!size) {
         size = 200;
     }

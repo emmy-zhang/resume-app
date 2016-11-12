@@ -35,8 +35,14 @@ block content
                 .col-sm-4
                     img(src="#{user.profile.picture}", class='profile', width='60', height='60')
         .form-group
+            label.col-sm-3.control-label(for='resume') Resume
+            .col-sm-4
+                input.form-control-file(type='file', name='resume', id='resume')
+                input(type='hidden', name='resume-url', id='resume-url')
+                small(id='resume-info')
+        .form-group
             .col-sm-offset-3.col-sm-4
-                button.btn.btn.btn-primary(type='submit')
+                button.btn.btn.btn-primary(type='submit', id='submit')
                     i.fa.fa-pencil
                     | Update Profile
 
