@@ -12,11 +12,13 @@ html
     include partials/header
 
     if(title == 'Home')
-      .container#main
-          block content
+        .container#main
+            include partials/flash
+            block content
     else
-      .container 
-          block content
+        .container 
+            include partials/flash
+            block content
 
     include partials/footer
 

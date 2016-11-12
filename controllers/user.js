@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const AWS = require('AWS-sdk');
 
-const User = require('../models/User');
+const User = require('../models/User').User;
 
 /**
  * GET /login

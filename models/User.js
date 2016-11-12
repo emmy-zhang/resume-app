@@ -69,12 +69,11 @@ const userSchema = new mongoose.Schema({
             default: ''
         }
     },
-
 }, {
     timestamps: true
 });
 
-const studentSchema = new mongoose.Schema({
+const applicantSchema = new mongoose.Schema({
     profile: {
         major: {
             type: String,
@@ -93,6 +92,27 @@ const studentSchema = new mongoose.Schema({
             default: ''
         },
         resume: {
+            type: String,
+            default: ''
+        },
+        skills: [{
+            type: String
+        }],
+        interests: [{
+            type: String
+        }]
+    }
+}, {
+    timestamps: true
+});
+
+const recruiterSchema = new mongoose.Schema({
+    profile: {
+        organzation: {
+            type: String,
+            default: ''
+        },
+        title: {
             type: String,
             default: ''
         },
@@ -155,5 +175,11 @@ userSchema.methods.identicon = function(size) {
 };
 
 const User = mongoose.model('User', userSchema);
+const Applicant = User.discriminator('Applicant', applicantSchema);
+const Recruiter = User.discriminator('Recruiter', recruiterSchema);
 
-module.exports = User;
+module.exports = {
+    User,
+    Applicant,
+    Recruiter
+};
