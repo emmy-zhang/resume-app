@@ -2,7 +2,8 @@ const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
-const AWS = require('AWS-sdk');
+const AWS = require('aws-sdk');
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const User = require('../models/User').User;
 
@@ -193,6 +194,42 @@ exports.postUpdateProfile = (req, res, next) => {
                 Body: 'Hello!'
             };
         }*/
+        if (req.body.resume) {
+            const config = new AWS.Config({
+                accessKeyId: process.env.S3_ID,
+                secretAccessKey: process.env.S3_SECRET,
+                region: process.env.S3_REGION,
+                params: {
+                    Bucket: process.env.S3_BUCKET
+                }
+            });
+
+            const s3 = new AWS.S3(config);
+            const fileName = req.query['file-name'];
+            const fileType = req.query['file-type'];
+
+            const s3Params = {
+                Bucket: process.env.S3_BUCKET,
+                Key: fileName,
+                Expires: 60,
+                ContentType: fileType,
+                ACL: 'public-read'
+            };
+
+            s3.getSignedUrl('putObject', s3Params, (err, data) => {
+                if (err) {
+                    console.log(err);
+                    return res.end();
+                }
+                const returnData = {
+                    signedRequest: data,
+                    url: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${fileName}`
+                };
+                res.write(JSON.stringify(returnData));
+                user.resume = returnData.url;
+                res.end();
+            });
+        }
         user.save((err) => {
             if (err) {
                 if (err.code === 11000) {
@@ -491,7 +528,7 @@ exports.postForgot = (req, res, next) => {
             const mailOptions = {
                 to: user.email,
                 from: 'hello@resumeapp.com',
-                subject: 'Reset your password on Meetchu',
+                subject: 'Reset your password on Resume App',
                 text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
                     Please click on the following link, or paste this into your browser to complete the process:\n\n
                     http://${req.headers.host}/reset/${token}\n\n
