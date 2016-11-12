@@ -37,6 +37,20 @@ app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 //app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 
+// OAuth authentication routes. (Sign in)
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location'] }));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
+    res.redirect(req.session.returnTo || '/');
+});
+app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+    res.redirect(req.session.returnTo || '/');
+});
+app.get('/auth/linkedin', passport.authenticate('linkedin'));
+app.get('/auth/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/login' }), (req, res) => {
+    res.redirect(req.session.returnTo || '/');
+});
+
 // Express config
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
