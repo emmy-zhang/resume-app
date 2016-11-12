@@ -7,32 +7,38 @@
 @import "themes/modern/modern";
 
 html {
-    position: relative;
-    height: 100%;
-    overflow: scroll;
+  position: relative;
+  height: 100%;
+  overflow: scroll;
 }
 
 body {
-    padding-top: $navbar-height + 10px;
-    height: 100%;
-    color: $gray-dark;
+  padding-top: $navbar-height + 10px;
+  min-height: 100%;
+  color: $gray-dark;
+}
 
-    > .container {
-      width: 100%;
-      min-height: 100%;
-    }
+#main {
+  width: 100%;
+  min-height: 100%;
+  margin-bottom: 42px;
+}
+
+#other {
+  margin-bottom: 42px;
 }
 
 h2 {
   font-family: "Source Sans Pro";
   font-weight: normal;
 }
+
 div.page-header {
   margin: 30px;
 }
+
 .studentDescriptionHome {
   position: relative;
-  width: auto;
   height: 300px;
   background-color: #007ee5;
   color: #ffffff;
@@ -114,8 +120,9 @@ div.page-header {
 
 // Footer
 footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
+    margin-top: 42px;
     width: 100%;
     border-top: 1px solid #e7ebf3;
     background-color: #fff;
