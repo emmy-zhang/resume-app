@@ -55,6 +55,13 @@ app.get('/auth/linkedin/callback', passport.authenticate('linkedin', { failureRe
   res.redirect(req.session.returnTo || '/');
 });
 
+// MongoDB
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
+mongoose.connection.on('error', () => {
+    console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
+    process.exit(1);
+});
+
 // Express config
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
