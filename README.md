@@ -7,8 +7,10 @@ Resume App for VandyHacks
 * Bootstrap for styling
 * Node.js/Express for routing
 * Heroku for deploying
+* MongoDB for database
+* Amazon Web Services as CDN
 
-## Install Instructions
+## Install/Use Instructions
 
 * clone the repo `git clone git@github.com:emmy917917/resume-app.git`
 * go into resume-app directory `cd resume-app`
