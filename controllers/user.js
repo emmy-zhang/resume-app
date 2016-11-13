@@ -175,6 +175,7 @@ exports.getAccount = (req, res) => {
  * Update account type information.
  */
 exports.postAccountType = (req, res, next) => {
+    console.log(req.body);
     req.assert('type', 'Please choose a valid account type.').isValidUserType();
 
     const errors = req.validationErrors();
@@ -183,7 +184,7 @@ exports.postAccountType = (req, res, next) => {
         req.flash('errors', errors);
         return res.redirect('/');
     }
-    console.log(req.body);
+
 
     User.findById(req.user.id, (err, user) => {
         if (err) {

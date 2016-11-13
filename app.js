@@ -63,6 +63,7 @@ app.use(expressValidator({
             return file.mimetype && file.mimetype === 'application/pdf';
         },
         isValidUserType: function(type) {
+            console.log(type);
             return type === 'recruiter' || type === 'applicant';
         }
     }
@@ -80,7 +81,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-    if (req.path === '/account/profile') {
+    if (req.path === '/account/profile' || req.path === '/account/type') {
         next();
     } else {
         lusca.csrf()(req, res, next);
