@@ -53,7 +53,10 @@ exports.postJobsCreate = (req, res, next) => {
         location: req.body.location,
         company: req.body.company,
         skills: req.body.skills.split(/[ ,]+/),
-        owner: req.user._id,
+        owner: {
+            id: req.user._id,
+            name: req.user.firstName + " " + req.user.lastName
+        },
         recruiters: [req.user._id]
     });
 
@@ -112,8 +115,8 @@ exports.postJob = (req, res) => {
         job.location = req.body.location;
         job.company = req.body.company;
         job.skills = req.body.skills.split(/[ ,]+/);
-        job.owner = req.user._id;
-        //job.recruiters = [req.user._id]
+        job.owner.id = req.user._id;
+        job.owner.name = req.user.firstName + " " + req.user.lastName;
         job.save((err) => {
             if (err) {
                 return next(err);
