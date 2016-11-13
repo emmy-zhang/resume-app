@@ -39,16 +39,15 @@ block content
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
                                 li {Company Name} {Recruiter} {Company Match Percentage}
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                        div.contactRequestsDashboard
+                        div.contactRequestsDashboard.jobOpeningSection
                             h2.text-center Your skills:
-                            div
-                              .col-sm-3.col-sm-offset-1
+                            ul
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                    input.form-control(type='skills', name='skills', id='skillsToAdd', placeholder='Skills (separate by commas)', autofocus, required)
+                                    button.btn.btn-secondary(type='button') Add Skill
 
-                                .col-lg-6
-                                  .input-group
-                                    input.form-control(type='text', placeholder='Add a new skill')
-                                    span.input-group-btn
-                                      button.btn.btn-secondary(type='button') Add
+
 
                     .col-md-5
                         div.currentContactsDashboard
@@ -78,8 +77,8 @@ block content
                                             li= opening.name
                             else
                                 p You have not listed any job openings.
-                                button.btn.btn-default(type='button') Add Job Opening
 
+                            button.btn.btn-default(type='button') Add Job Opening
                     .col-md-5
                         div.currentContactsDashboard
                             h2.text-center Current Applicant Contacts
@@ -98,7 +97,7 @@ block content
                     .form-group
                         label.col-sm-3.control-label(for='type') User Type
                         .col-sm-6
-                            select(name='type')
+                            select(name='type', id='typeDropdown')
                                 option(value='applicant') Applicant
                                 option(value='recruiter') Recruiter
                     .form-group
