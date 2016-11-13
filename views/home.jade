@@ -31,13 +31,13 @@ block content
                         div.contactRequestsDashboard
                             h2.text-center New contact requests:
                             ul
-                                li {Company Name} {Recruiter} {Company Match Percentage}&nbsp;
+                                li {Company Name} {Recruiter} {Company Match Percentage}&nbsp;&nbsp;
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                li {Company Name} {Recruiter} {Company Match Percentage}&nbsp;
+                                li {Company Name} {Recruiter} {Company Match Percentage}&nbsp;&nbsp;
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                li {Company Name} {Recruiter} {Company Match Percentage}&nbsp;
+                                li {Company Name} {Recruiter} {Company Match Percentage}&nbsp;&nbsp;
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                li {Company Name} {Recruiter} {Company Match Percentage}&nbsp;
+                                li {Company Name} {Recruiter} {Company Match Percentage}&nbsp;&nbsp;
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
                         div.contactRequestsDashboard
                             h2.text-center Your skills:
@@ -101,8 +101,8 @@ block content
                                     each contact in user.contacts
                                         form(action='/user/' + contact.id + '/disconnect', method='POST')
                                             li
-                                                label(for='id') #{contact.name}
-                                                input.btn.btn-default.btn-xs.btn-danger(type='submit', value='#{contact.id}', text='Remove Contact')
+                                                label(for='id') #{contact.name} &nbsp;&nbsp;
+                                                input.btn.btn-default.btn-xs.btn-danger(type='submit', value='Remove Contact', text='Remove Contact')
                             else
                                 p You have no contacts.
                         div.currentContactsDashboard
@@ -111,10 +111,16 @@ block content
                                 p There are #{users.length} applicants that you can connect with.
                                 ul.jobOpeningSection
                                     each applicant in users
+                                      if user.contacts.findValue('id', applicant.id) === false
                                         form(action='/user/' + applicant.id + '/connect', method='POST')
                                             li
                                                 label(for='id') #{applicant.profile.firstName} #{applicant.profile.lastName}&nbsp;&nbsp;
                                                 input.btn.btn-xs.btn-success(type='submit', value='Connect', text='Connect')
+                                      else
+                                        form(action='/user/' + applicant.id + '/connect', method='POST')
+                                            li
+                                                label(for='id') #{applicant.profile.firstName} #{applicant.profile.lastName}&nbsp;&nbsp;
+                                                input.btn.btn-xs.btn-success.disabled(type='submit', value='Connect', text='Connect')
                             else
                                 p There are no applicants to connect with.
 
@@ -133,3 +139,17 @@ block content
                             button.btn.btn-success(type='submit')
                                 i.fa.fa-user-plus
                                 | Update
+
+    script.
+      Array.prototype.findValue = (obj, query) => {
+          for (var key in obj) {
+              var value = obj[key];
+              if (typeof value === 'object') {
+                  searchObj(value, query);
+              }
+              if (value === query) {
+                  return true;
+              }
+          }
+          return false;
+      }
