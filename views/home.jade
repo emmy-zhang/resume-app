@@ -66,4 +66,12 @@ block content
                                   li {Company Name} {Recruiter} {Company Match Percentage}
                                       button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
                 else
-                    h1 No type
+                    h1 Please select your account type.
+                    form.form-horizontal(action='/account/type', enctype="multipart/form-data", method='POST')
+                        input(type='hidden', name='_csrf', value=_csrf)
+                        .form-group
+                            label.col-sm-3.control-label(for='name') Name
+                            .col-sm-3
+                                input.form-control(type='text', name='firstName', id='firstName', placeholder='First', value='#{user.profile.firstName}')
+                            .col-sm-3
+                                input.form-control(type='text', name='lastName', id='lastName', placeholder='Last', value='#{user.profile.lastName}')
