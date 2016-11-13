@@ -61,6 +61,9 @@ app.use(expressValidator({
     customValidators: {
         isValidPDF: function(file) {
             return file.mimetype && file.mimetype === 'application/pdf';
+        },
+        isValidUserType: function(type) {
+            return type === 'recruiter' || type === 'applicant';
         }
     }
 }));
@@ -118,6 +121,7 @@ app.post('/signup', userController.postSignup);
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
+app.post('/account/type', passportConfig.isAuthenticated, userController.postAccountType);
 app.post('/account/profile', passportConfig.isAuthenticated, upload.single('resume'), userController.postUpdateProfile);
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);

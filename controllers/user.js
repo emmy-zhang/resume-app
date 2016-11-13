@@ -170,6 +170,94 @@ exports.getAccount = (req, res) => {
 };
 
 /**
+ * POST /account/type
+ * Update account type information.
+ */
+exports.postAccountType = (req, res, next) => {
+    req.assert('type', 'Please choose a valid account type.').isValidUserType();
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+        req.flash('errors', errors);
+        return res.redirect('/');
+    }
+    console.log(req.body);
+
+    User.findById(req.user.id, (err, user) => {
+        if (err) {
+            return next(err);
+        }
+        var newUser;
+        if (req.body.type === "applicant") {
+            newUser = new Applicant({
+                email: user.email,
+                password: user.password || '',
+                passwordResetToken: user.passwordResetToken || '',
+                passwordResetExpires: user.passwordResetToken || '',
+
+                facebook: user.facebook,
+                google: user.google,
+                github: user.github,
+                tokens: user.tokens,
+
+                profile: {
+                    firstName: user.profile.firstName,
+                    lastName: user.profile.lastName,
+                    location: user.profile.location,
+                    website: user.profile.website,
+                    picture: user.profile.picture
+                },
+            });
+        } else if (req.body.type === "recruiter") {
+            newUser = new Recruiter({
+                email: user.email,
+                password: user.password || '',
+                passwordResetToken: user.passwordResetToken || '',
+                passwordResetExpires: user.passwordResetToken || '',
+
+                facebook: user.facebook,
+                google: user.google,
+                github: user.github,
+                tokens: user.tokens,
+
+                profile: {
+                    firstName: user.profile.firstName,
+                    lastName: user.profile.lastName,
+                    location: user.profile.location,
+                    website: user.profile.website,
+                    picture: user.profile.picture
+                },
+            });
+        }
+        User.remove({
+            _id: req.user.id
+        }, (err) => {
+            if (err) {
+                return next(err);
+            }
+            req.logout();
+            newUser.save((err) => {
+                if (err) {
+                    if (err.code === 11000) {
+                        req.flash('errors', {
+                            msg: 'The email address you have entered is already associated with an account.'
+                        });
+                        return res.redirect('/account');
+                    }
+                    return next(err);
+                }
+                req.flash('success', {
+                    msg: 'Your account type has been updated.'
+                });
+                res.redirect('/');
+            });
+        });
+
+    });
+};
+
+/**
  * POST /account/profile
  * Update profile information.
  */
@@ -257,79 +345,13 @@ exports.postUpdateProfile = (req, res, next) => {
 
 function uploadToS3(file, fileName, callback) {
     s3.upload({
-            Bucket: process.env.S3_BUCKET,
-            //Body: fs.createReadStream(file.path),
-            Body: file.buffer,
-            Key: fileName.toString(),
-            ContentType: 'application/octet-stream', // force download if it's accessed as a top location
-            ACL: 'public-read'
-        })
-        // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#httpUploadProgress-event
-        // .on('httpUploadProgress', function(evt) { console.log(evt); })
-        // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#send-property
-        .send(callback);
+        Bucket: process.env.S3_BUCKET,
+        Body: file.buffer,
+        Key: fileName.toString(),
+        ContentType: 'application/octet-stream',
+        ACL: 'public-read'
+    }).send(callback);
 }
-/*
-exports.signS3 = (req, res, next) => {
-    //console.log(req);
-    User.findById(req.user.id, (err, user) => {
-        console.log("user: " + user);
-        if (err) {
-            return next(err);
-        }
-        const config = new AWS.Config({
-            accessKeyId: process.env.S3_ID,
-            secretAccessKey: process.env.S3_SECRET,
-            region: process.env.S3_REGION,
-            params: {
-                Bucket: process.env.S3_BUCKET
-            }
-        });
-
-        const s3 = new AWS.S3(config);
-        const fileName = req.query['file-name'];
-        const fileType = req.query['file-type'];
-
-        const s3Params = {
-            Bucket: process.env.S3_BUCKET,
-            Key: fileName,
-            Expires: 60,
-            ContentType: fileType,
-            ACL: 'public-read'
-        };
-
-        s3.getSignedUrl('putObject', s3Params, (err, data) => {
-            if (err) {
-                console.log(err);
-                return res.end();
-            }
-            const returnData = {
-                signedRequest: data,
-                url: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${fileName}`
-            };
-            user.profile.resume = returnData.url;
-            res.write(JSON.stringify(returnData));
-        });
-        user.save((err) => {
-            if (err) {
-                if (err.code === 11000) {
-                    req.flash('errors', {
-                        msg: 'The email address you have entered is already associated with an account.'
-                    });
-                    return res.redirect('/account');
-                }
-                return next(err);
-            }
-
-            req.flash('success', {
-                msg: 'Profile information has been updated.'
-            });
-            res.redirect('/account');
-
-            res.end();
-        });
-    });
-};*/
 
 /**
  * POST /account/password
