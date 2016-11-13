@@ -1,13 +1,16 @@
 extends ../layout
 
 block content
-    body
-      .container
-        if (user.__t === "applicant")
+  if (user.__t === "applicant")
+    .page-header
+        h3 #{job.name}
+        p Company: #{job.company}
 
-          p Job title: #{job.title}
-          p Description: #{job.description}
-          p Location: #{job.location}
-          p Company: #{job.company}
-          p Skills: #{job.skills}
-          p Owner: #{job.owner}
+    h4 Description:
+      p #{job.description}
+    h4 Location:
+      p #{job.location}
+    h4 Skills Needed:
+      p #{job.skills}
+    h4 Owner:
+      p #{job.owner.name}
