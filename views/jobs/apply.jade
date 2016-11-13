@@ -12,5 +12,11 @@ block content
       p #{job.location}
       h4 Skills Needed:
       p #{job.skills}
-      h4 Owner:
+      h4 Recruiter:
       p #{job.owner.name}
+
+    .form-group
+        .col-sm-offset-1.col-sm-6
+            button.btn.btn.btn-primary(type='submit', id='submit')
+                i.fa.fa-pencil
+                | I'm interested in this job
