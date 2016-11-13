@@ -10,6 +10,7 @@ const multerS3 = require('multer-s3');
 const User = require('../models/User').User;
 const Applicant = require('../models/User').Applicant;
 const Recruiter = require('../models/User').Recruiter;
+const Job = require('../models/Job');
 
 const config = new AWS.Config({
     accessKeyId: process.env.S3_ID,
@@ -52,13 +53,17 @@ exports.postJobsCreate = (req, res, next) => {
         location: req.body.location,
         company: req.body.company,
         skills: req.body.skills.split(/[ ,]+/),
-        owner: req.user._id
+        owner: req.user._id,
+        recruiters: [req.user._id]
     });
+
+    console.log(job);
+    console.log(JSON.stringify(job));
 
     job.save((err) => {
         if (err) { return next(err); }
-        User.findByIdAndUpdate(req.user._id, {
-            $push: { openings: { name: job.name, id: job._id } }
+        Recruiter.findByIdAndUpdate(req.user._id, {
+            $push: { 'openings': { name: job.name, id: job._id } }
         }, { 'new': true}, (err) => {
             if (err) { return next(err); }
             return res.redirect('/jobs/' + job._id);
@@ -87,11 +92,13 @@ exports.getJob = (req, res) => {
 exports.postJob = (req, res) => {
     Job.findById(req.params.id, (err, job) => {
         if (err) { return next(err); }
-        job.name = req.body.name,
-        job.description = req.body.description || '',
-        job.location = req.body.location,
-        job.company = req.body.company,
-        job.skills = req.body.skills.split(/[ ,]+/)
+        job.name = req.body.name;
+        job.description = req.body.description || '';
+        job.location = req.body.location;
+        job.company = req.body.company;
+        job.skills = req.body.skills.split(/[ ,]+/);
+        job.owner = req.user._id;
+        //job.recruiters = [req.user._id]
         job.save((err) => {
             if (err) { return next(err); }
             req.flash('success', { msg: 'Job opening information has been updated.' });
@@ -112,7 +119,7 @@ exports.deleteJob = (req, res) => {
     Job.remove({ _id: id }, (err) => {
         if (err) { return next(err); }
         req.flash('info', { msg: 'The job opening has been deleted.' });
-        User.update({ _id: req.user._id }, { $pull: { openings: { id: id } } }, (err) => {
+        Recruiter.update({ _id: req.user._id }, { $pull: { openings: { id: id } } }, (err) => {
             if (err) { return next(err); }
             return res.redirect('/');
         });

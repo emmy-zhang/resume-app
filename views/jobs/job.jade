@@ -7,28 +7,32 @@ block content
     form.form-horizontal(action='/jobs/#{job.id}', method='POST')
         input(type='hidden', name='_csrf', value=_csrf)
         .form-group
-            label.col-sm-3.control-label(for='name') Name
-            .col-sm-7
-                input.form-control(type='text', name='name', id='name', value='#{job.name}')
+          label.col-sm-3.control-label(for='name') Job Name
+          .col-sm-6
+              input.form-control(type='name', name='name', id='name', placeholder='Job Name', autofocus, required)
         .form-group
-            label.col-sm-3.control-label(for='description') Description
-            .col-sm-7
-                textarea.form-control(name='description', id='description', rows='3') #{job.description}
+          label.col-sm-3.control-label(for='company') Company
+          .col-sm-6
+            input.form-control(type='company', name='company', id='company', placeholder='Company', autofocus, required)
         .form-group
-            label.col-sm-3.control-label(for='location') Location
-            .col-sm-7
-                input.form-control(type='text', name='location', id='location', value='#{job.location}')
+          label.col-sm-3.control-label(for='description') Description
+          .col-sm-6
+              input.form-control(type='description', name='description', id='description', placeholder='Description', autofocus, required)
         .form-group
-            label.col-sm-3.control-label(for='company') company
-            .col-sm-7
-                input.form-control(type='text', name='company', id='company', value='#{job.company}')
+          label.col-sm-3.control-label(for='location') Location
+          .col-sm-6
+              input.form-control(type='location', name='location', id='location', placeholder='Location', autofocus, required)
+        .form-group
+          label.col-sm-3.control-label(for='skills') Skills
+          .col-sm-6
+              input.form-control(type='skills', name='skills', id='skills', placeholder='Skills (separate by commas)', autofocus, required)
         .form-group
             .col-sm-offset-3.col-sm-4
                 button.btn.btn.btn-primary(type='submit')
                     i.fa.fa-pencil
                     | Update Job
 
-    if (job.owner === user._id || event.recruiters.indexOf(user.id) !== -1)
+    if (job.owner === user._id || job.recruiters.indexOf(user._id) !== -1)
         .page-header
             h3 Delete Job
 

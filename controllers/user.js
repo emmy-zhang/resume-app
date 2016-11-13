@@ -108,7 +108,6 @@ exports.postSignup = (req, res, next) => {
         remove_dots: false
     });
 
-
     const errors = req.validationErrors();
 
     if (errors) {
@@ -117,23 +116,25 @@ exports.postSignup = (req, res, next) => {
     }
 
     var user;
-    if (req.body.type == 'recruiter') {
+    if (req.body.type === 'recruiter') {
         user = new Recruiter({
             profile: {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName
             },
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            openings: []
         });
-    } else {
+    } else if (req.body.type === 'applicant') {
         user = new Applicant({
             profile: {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName
             },
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            applications: []
         });
     }
 
