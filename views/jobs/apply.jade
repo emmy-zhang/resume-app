@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    body
+      .container
+        if (user.__t === "applicant")
+
+          p Job title: #{job.title}
+          p Description: #{job.description}
+          p Location: #{job.location}
+          p Company: #{job.company}
+          p Skills: #{job.skills}
+          p Owner: #{job.owner}
