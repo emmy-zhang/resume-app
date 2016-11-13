@@ -53,10 +53,15 @@ block content
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
                                 li {Company Name} {Recruiter} {Company Match Percentage}
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                            if user.contactRequests.length > 0
+                                p You have #{user.contactRequests.length} contact requests.
+                                ul.jobOpeningSection
+                                    each request in user.contactRequests
+                                        a(href='/user/' + request.id + '/connect')
+                                            li #{request.name}
+
+                            else
+                                p You have no contact requests.
 
                     .col-md-5
                         div.currentContactsDashboard
@@ -99,6 +104,18 @@ block content
                                     button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
                                 li {Applicant Name} {School} {Match Percentage} &nbsp;
                                     button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                        div.currentContactsDashboard
+                            h2.text-center Applicants
+                            if users.length > 0
+                                p There are #{users.length} applicants that you can connect with.
+                                ul.jobOpeningSection
+                                    each applicant in users
+                                        form(action='/user/' + applicant.id + '/connect', method='POST')
+                                            li
+                                                label(for='id') #{applicant.profile.firstName} #{applicant.profile.lastName}
+                                                input.btn.btn-xs.btn-success(type='submit', value='#{applicant.id}', text='Connect')
+                            else
+                                p There are no applicants to connect with.
 
               else
                 h1 Please select your account type.

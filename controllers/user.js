@@ -575,19 +575,18 @@ exports.postConnectUser = (req, res, next) => {
             });
             return res.redirect('back');
         }
-        const index = user.contacts.indexOf(userToDisconnect);
+        const index = req.user.contacts.indexOf(userToConnect);
         if (index != -1) {
             req.flash('errors', {
                 msg: 'User is already a contact.'
             });
             return res.redirect('back');
         }
-        user.contacts.push({name: userToConnect.profile.firstName + " " + userToConnect.profile.lastName, id: userToConnect._id});
-        user.save((err) => {
+        req.user.contacts.push({name: userToConnect.profile.firstName + " " + userToConnect.profile.lastName, id: userToConnect._id});
+        req.user.save((err) => {
             if (err) {
                 return next(err);
             }
-            req.logout();
             req.flash('info', {
                 msg: 'You have successfully connected with user.'
             });
@@ -612,8 +611,8 @@ exports.postDisconnectUser = (req, res, next) => {
             return res.redirect('back');
         }
         var index = -1;
-        for (var i = 0; i < user.contacts.length; i++) {
-            if (users.contacts[i].id == userToDisconnect) {
+        for (var i = 0; i < req.user.contacts.length; i++) {
+            if (req.user.contacts[i].id == userToDisconnect) {
                 index = i;
                 break;
             }
@@ -624,14 +623,13 @@ exports.postDisconnectUser = (req, res, next) => {
             });
             return res.redirect('back');
         }
-        user.contacts.splice(index, 1);
-        user.save((err) => {
+        req.user.contacts.splice(index, 1);
+        req.user.save((err) => {
             if (err) {
                 return next(err);
             }
-            req.logout();
             req.flash('info', {
-                msg: 'You have successfully disconnected with user.'
+                msg: 'You have successfully disconnected with the user.'
             });
             res.redirect('/');
         });

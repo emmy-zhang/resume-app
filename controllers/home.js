@@ -1,3 +1,4 @@
+const Applicant = require('../models/User').Applicant;
 const Job = require('../models/Job');
 
 /**
@@ -5,20 +6,37 @@ const Job = require('../models/Job');
  * Home page.
  */
 exports.index = (req, res) => {
-    if (req.user && req.user.__t === 'applicant') {
-        Job.
+    if (req.user) {
+        if (req.user.__t === 'applicant') {
+            Job.
             find({}).
             limit(10).
-            sort({ date: -1} ).
+            sort({
+                date: -1
+            }).
             exec((err, jobs) => {
                 res.render('home', {
                     title: 'Home',
                     jobs: jobs
                 });
             });
+        } else if (req.user.__t === 'recruiter') {
+            Applicant.
+            find({}).
+            limit(10).
+            sort({
+                date: -1
+            }).
+            exec((err, users) => {
+                res.render('home', {
+                    title: 'Home',
+                    users: users
+                });
+            });
+        }
     } else {
-    res.render('home', {
-        title: 'Home'
-    });
-}
+        res.render('home', {
+            title: 'Home'
+        });
+    }
 };
