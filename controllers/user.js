@@ -248,7 +248,7 @@ exports.postAccountType = (req, res, next) => {
                     }
                     return next(err);
                 }
-                req.logIn(user, (err) => {
+                req.logIn(newUser, (err) => {
                     if (err) {
                         return next(err);
                     }
