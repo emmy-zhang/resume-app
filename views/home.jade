@@ -111,8 +111,8 @@ block content
                                     each applicant in users
                                         form(action='/user/' + applicant.id + '/connect', method='POST')
                                             li
-                                                label(for='id') #{applicant.profile.firstName} #{applicant.profile.lastName}
-                                                input.btn.btn-xs.btn-success(type='submit', value='#{applicant.id}', text='Connect')
+                                                label(for='id') #{applicant.profile.firstName} #{applicant.profile.lastName}&nbsp;&nbsp;
+                                                input.btn.btn-xs.btn-success(type='submit', value='Connect', text='Connect')
                             else
                                 p There are no applicants to connect with.
 
