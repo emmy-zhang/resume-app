@@ -40,12 +40,11 @@ block content
                                 li {Company Name} {Recruiter} {Company Match Percentage}
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
                         div.contactRequestsDashboard
-                            h2.text-center New contact requests:
-                            ul
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                            h2.text-center Your skills:
+                            div
+                              .col-sm-3.col-sm-offset-1
+                                
+
                     .col-md-5
                         div.currentContactsDashboard
                             h2.text-center Current Contacts
@@ -56,15 +55,7 @@ block content
                                     button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
                                 li {Company Name} {Recruiter} {Company Match Percentage}
                                     button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                        div.currentContactsDashboard
-                            h2.text-center Current Contacts
-                            ul
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+
             else
               if (user.__t == 'recruiter')
                 div.contentHome.container-fluid
