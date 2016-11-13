@@ -164,18 +164,22 @@ div.page-header {
     }
 }
 
-.userTypeButton {
+#applicant, #recruiter {
     color: #999;
-    background-color: #ffffff;
-    border: 1px solid #f0f0f0;
+    background-color: #fff;
+    border: 1px solid #999;
     border-radius: 2px;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    :active,
-    :focus,
-    :hover {
-        background-color: #888;
-        color: #fff;
-    }
+}
+
+#applicant:active,
+#applicant:focus,
+#applicant:hover,
+#recruiter:active,
+#recruiter:focus,
+#recruiter:hover {
+  background-color: #999;
+  color: #fff;
 }
 // Footer
 
