@@ -77,6 +77,12 @@ block content
                 label.col-sm-3.control-label(for='skills') Skills
                 .col-sm-6
                     input.form-control(type='text', name='skills', id='skills', value='#{user.profile.skills}')
+
+            .form-group
+                .col-sm-offset-3.col-sm-4
+                    button.btn.btn.btn-primary(type='submit', id='submit')
+                        i.fa.fa-pencil
+                        | Save Information
     else
         .page-header
             h3 Recruiter Information
@@ -90,6 +96,12 @@ block content
                 label.col-sm-3.control-label(for='title') Title
                 .col-sm-6
                     input.form-control(type='text', name='title', id='title', value='#{user.profile.title}')
+
+            .form-group
+                .col-sm-offset-3.col-sm-4
+                    button.btn.btn.btn-primary(type='submit', id='submit')
+                        i.fa.fa-pencil
+                        | Save Information
 
     .page-header
         h3 Change Password
