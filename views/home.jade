@@ -72,7 +72,8 @@ block content
                                 ul.jobOpeningSection
                                     each opening in user.openings
                                         a(href='/jobs/' + opening.id)
-                                            li= opening.name
+                                            li #{opening.name}
+
                             else
                                 p You have not listed any job openings.
                             form(action="jobs/create", method='GET')
