@@ -575,7 +575,14 @@ exports.postConnectUser = (req, res, next) => {
             });
             return res.redirect('back');
         }
-        const index = req.user.contacts.indexOf(userToConnect);
+        var index = -1;
+        for (var i = 0; i < req.user.contacts.length; i++) {
+            console.log(req.user.contacts[i]);
+            if (req.user.contacts[i].id == userToConnect.id) {
+                index = i;
+                break;
+            }
+        }
         if (index != -1) {
             req.flash('errors', {
                 msg: 'User is already a contact.'
@@ -611,7 +618,6 @@ exports.postDisconnectUser = (req, res, next) => {
             return res.redirect('back');
         }
         var index = -1;
-        console.log(userToDisconnect);
         for (var i = 0; i < req.user.contacts.length; i++) {
             console.log(req.user.contacts[i]);
             if (req.user.contacts[i].id == userToDisconnect.id) {
