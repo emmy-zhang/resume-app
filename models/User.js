@@ -80,10 +80,7 @@ const applicantSchema = new mongoose.Schema({
             type: String
         }]
     },
-    applications: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Job'
-    }],
+    applications: [{ name: String, id: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' }}],
 }, {
     timestamps: true,
     options
@@ -106,10 +103,7 @@ const recruiterSchema = new mongoose.Schema({
             type: String
         }]
     },
-    openings: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Job'
-    }],
+    openings: [{ name: String, id: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' }}],
 }, {
     timestamps: true,
     options

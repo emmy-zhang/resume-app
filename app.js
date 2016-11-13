@@ -29,6 +29,7 @@ dotenv.load({
 const homeController = require('./controllers/home');
 const contactController = require('./controllers/contact');
 const userController = require('./controllers/user');
+const jobController = require('./controllers/jobs');
 
 // Passport config
 const passportConfig = require('./config/passport');
@@ -127,6 +128,11 @@ app.post('/account/profile', passportConfig.isAuthenticated, upload.single('resu
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
+app.get('/jobs/create', passportConfig.isAuthenticated, jobController.getJobsCreate);
+app.post('/jobs/create', passportConfig.isAuthenticated, jobController.postJobsCreate);
+app.get('/jobs/:id', passportConfig.isAuthenticated, jobController.getJob);
+app.post('/jobs/:id', passportConfig.isAuthenticated, jobController.postJob);
+app.post('/jobs/:id/delete', passportConfig.isAuthenticated, jobController.deleteJob);
 
 // OAuth authentication routes. (Sign in)
 app.get('/auth/facebook', passport.authenticate('facebook', {

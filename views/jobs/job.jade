@@ -1,0 +1,45 @@
+extends ../layout
+
+block content
+    .page-header
+        h3 Job Information
+
+    form.form-horizontal(action='/jobs/#{job.id}', method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+            label.col-sm-3.control-label(for='name') Name
+            .col-sm-7
+                input.form-control(type='text', name='name', id='name', value='#{job.name}')
+        .form-group
+            label.col-sm-3.control-label(for='description') Description
+            .col-sm-7
+                textarea.form-control(name='description', id='description', rows='3') #{job.description}
+        .form-group
+            label.col-sm-3.control-label(for='location') Location
+            .col-sm-7
+                input.form-control(type='text', name='location', id='location', value='#{job.location}')
+        .form-group
+            label.col-sm-3.control-label(for='company') company
+            .col-sm-7
+                input.form-control(type='text', name='company', id='company', value='#{job.company}')
+        .form-group
+            .col-sm-offset-3.col-sm-4
+                button.btn.btn.btn-primary(type='submit')
+                    i.fa.fa-pencil
+                    | Update Job
+
+    if (job.owner === user._id || event.recruiters.indexOf(user.id) !== -1)
+        .page-header
+            h3 Delete Job
+
+        form.form-horizontal(action='/jobs/#{job.id}/delete', method='POST')
+            .form-group
+                input(type='hidden', name='_csrf', value=_csrf)
+                .col-sm-offset-3.col-sm-4
+                    if (job.owner === user._id)
+                        p You are the owner of this job opening.
+                    else if (event.recruiters.indexOf(user.id) !== -1)
+                        p You are a recruiter for this job opening.
+                    button.btn.btn-danger(type='submit')
+                        i.fa.fa-trash
+                        | Delete job

@@ -8,6 +8,8 @@ const jobSchema = new mongoose.Schema({
     description: String,
     location: String,
     company: String,
+    skills: [String],
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'Recruiter' },
     applicants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Applicant' }],
     recruiters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Recruiter' }]
 }, { timestamps: true });
