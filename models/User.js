@@ -75,12 +75,11 @@ const applicantSchema = new mongoose.Schema({
         },
         skills: [{
             type: String
-        }],
-        interests: [{
-            type: String
         }]
     },
     applications: [{ name: String, id: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' }}],
+    contacts: [{ name: String, id: { type: mongoose.Schema.Types.ObjectId, ref: 'Recruiter' }}],
+    contactRequests: [{ name: String, id: { type: mongoose.Schema.Types.ObjectId, ref: 'Recruiter' }}],
 }, {
     timestamps: true,
     options
@@ -96,14 +95,9 @@ const recruiterSchema = new mongoose.Schema({
             type: String,
             default: ''
         },
-        skills: [{
-            type: String
-        }],
-        interests: [{
-            type: String
-        }]
     },
     openings: [{ name: String, id: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' }}],
+    contacts: [{ name: String, id: { type: mongoose.Schema.Types.ObjectId, ref: 'Applicant' }}],
 }, {
     timestamps: true,
     options

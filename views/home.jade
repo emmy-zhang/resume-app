@@ -46,17 +46,30 @@ block content
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
                                     input.form-control(type='skills', name='skills', id='skillsToAdd', placeholder='Skills (separate by commas)', autofocus, required)
                                     button.btn.btn-secondary(type='button') Add Skill
+                        div.contactRequestsDashboard
+                            h2.text-center New contact requests:
+                            ul
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
 
                     .col-md-5
                         div.currentContactsDashboard
-                            h2.text-center Current Contacts
-                            ul
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                            h2.text-center Jobs
+                            if jobs.length > 0
+                                p There are #{jobs.length} openings.
+                                ul.jobOpeningSection
+                                    each job in jobs
+                                        a(href='/jobs/' + job.id + '/apply')
+                                            li #{job.name}
+
+                            else
+                                p You have not listed any job openings.
 
             else
               if (user.__t == 'recruiter')

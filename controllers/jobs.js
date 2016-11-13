@@ -61,11 +61,22 @@ exports.postJobsCreate = (req, res, next) => {
     console.log(JSON.stringify(job));
 
     job.save((err) => {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         Recruiter.findByIdAndUpdate(req.user._id, {
-            $push: { 'openings': { name: job.name, id: job._id } }
-        }, { 'new': true}, (err) => {
-            if (err) { return next(err); }
+            $push: {
+                'openings': {
+                    name: job.name,
+                    id: job._id
+                }
+            }
+        }, {
+            'new': true
+        }, (err) => {
+            if (err) {
+                return next(err);
+            }
             return res.redirect('/jobs/' + job._id);
         });
     });
@@ -77,7 +88,9 @@ exports.postJobsCreate = (req, res, next) => {
  */
 exports.getJob = (req, res) => {
     Job.findById(req.params.id, (err, job) => {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         res.render('jobs/job', {
             title: 'Job',
             job: job
@@ -91,7 +104,9 @@ exports.getJob = (req, res) => {
  */
 exports.postJob = (req, res) => {
     Job.findById(req.params.id, (err, job) => {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         job.name = req.body.name;
         job.description = req.body.description || '';
         job.location = req.body.location;
@@ -100,8 +115,12 @@ exports.postJob = (req, res) => {
         job.owner = req.user._id;
         //job.recruiters = [req.user._id]
         job.save((err) => {
-            if (err) { return next(err); }
-            req.flash('success', { msg: 'Job opening information has been updated.' });
+            if (err) {
+                return next(err);
+            }
+            req.flash('success', {
+                msg: 'Job opening information has been updated.'
+            });
             res.render('jobs/job', {
                 title: 'Job',
                 job: job
@@ -116,12 +135,87 @@ exports.postJob = (req, res) => {
  */
 exports.deleteJob = (req, res) => {
     const id = req.params.id;
-    Job.remove({ _id: id }, (err) => {
-        if (err) { return next(err); }
-        req.flash('info', { msg: 'The job opening has been deleted.' });
-        Recruiter.update({ _id: req.user._id }, { $pull: { openings: { id: id } } }, (err) => {
-            if (err) { return next(err); }
+    Job.remove({
+        _id: id
+    }, (err) => {
+        if (err) {
+            return next(err);
+        }
+        req.flash('info', {
+            msg: 'The job opening has been deleted.'
+        });
+        Recruiter.update({
+            _id: req.user._id
+        }, {
+            $pull: {
+                openings: {
+                    id: id
+                }
+            }
+        }, (err) => {
+            if (err) {
+                return next(err);
+            }
             return res.redirect('/');
         });
     });
+};
+
+/**
+ * GET /jobs/:id/apply
+ * Job application page.
+ */
+exports.getJobApply = (req, res) => {
+    Job.findById(req.params.id, (err, job) => {
+        if (err) {
+            return next(err);
+        }
+        res.render('jobs/apply', {
+            title: 'Job Application',
+            job: job
+        });
+    });
+};
+
+/**
+ * POST /jobs/:id/apply
+ * Apply to a job.
+ */
+exports.postJobApply = (req, res) => {
+    if (req.user) {
+        req.flash('error', {
+            msg: 'You are not logged in.'
+        });
+        res.redirect('back');
+    } else if (req.user !== 'applicant') {
+        req.flash('error', {
+            msg: 'You are not an applicant.'
+        });
+        res.redirect('back');
+    } else {
+        Job.findById(req.params.id, (err, job) => {
+            if (err) {
+                return next(err);
+            }
+            if (job.applicants.indexOf(req.user.id) != -1) {
+                req.flash('error', {
+                    msg: 'You have already applied to this job.'
+                });
+                res.redirect('back');
+            }
+            job.applicants.push(req.user.id);
+            job.save((err) => {
+                if (err) {
+                    return next(err);
+                }
+                req.flash('success', {
+                    msg: 'Job opening information has been updated.'
+                });
+                res.render('jobs/job', {
+                    title: 'Job',
+                    job: job
+                });
+            });
+        });
+    }
 };

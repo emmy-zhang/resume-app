@@ -186,7 +186,6 @@ exports.postAccountType = (req, res, next) => {
         return res.redirect('/');
     }
 
-
     User.findById(req.user.id, (err, user) => {
         if (err) {
             return next(err);
@@ -520,8 +519,8 @@ exports.postReset = (req, res, next) => {
             });
             const mailOptions = {
                 to: user.email,
-                from: 'meetchu@meetchu.com',
-                subject: 'Your Meetchu password has been changed',
+                from: 'hello@resumeapp.com',
+                subject: 'Your resumeapp password has been changed',
                 text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n`
             };
             transporter.sendMail(mailOptions, (err) => {
@@ -536,6 +535,100 @@ exports.postReset = (req, res, next) => {
             return next(err);
         }
         res.redirect('/');
+    });
+};
+
+/**
+ * GET /user/:id
+ * Get user information.
+ */
+exports.getUser = (req, res, next) => {
+    User.findById(req.params.id, (err, user) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            req.flash('errors', {
+                msg: 'User with given id could not be found.'
+            });
+            return res.redirect('back');
+        }
+        res.render('user/id', {
+            title: 'User Profile',
+            viewedUser: user
+        });
+    });
+};
+
+/**
+ * POST /user/:id/connect
+ * Connect with user account.
+ */
+exports.postConnectUser = (req, res, next) => {
+    User.findById(req.params.id, (err, userToConnect) => {
+        if (err) {
+            return next(err);
+        }
+        if (!userToConnect) {
+            req.flash('errors', {
+                msg: 'User with given id could not be found.'
+            });
+            return res.redirect('back');
+        }
+        const index = user.contacts.indexOf(userToDisconnect);
+        if (index != -1) {
+            req.flash('errors', {
+                msg: 'User is already a contact.'
+            });
+            return res.redirect('back');
+        }
+        user.contacts.push(userToConnect._id);
+        user.save((err) => {
+            if (err) {
+                return next(err);
+            }
+            req.logout();
+            req.flash('info', {
+                msg: 'You have successfully connected with user.'
+            });
+            res.redirect('/');
+        });
+    });
+};
+
+/**
+ * POST /user/:id/disconnect
+ * Disconnect with user account.
+ */
+exports.postDisconnectUser = (req, res, next) => {
+    User.findById(req.params.id, (err, userToDisconnect) => {
+        if (err) {
+            return next(err);
+        }
+        if (!userToDisconnect) {
+            req.flash('errors', {
+                msg: 'User with given id could not be found.'
+            });
+            return res.redirect('back');
+        }
+        const index = user.contacts.indexOf(userToDisconnect);
+        if (index == -1) {
+            req.flash('errors', {
+                msg: 'User is not a contact.'
+            });
+            return res.redirect('back');
+        }
+        user.contacts.splice(index, 1);
+        user.save((err) => {
+            if (err) {
+                return next(err);
+            }
+            req.logout();
+            req.flash('info', {
+                msg: 'You have successfully disconnected with user.'
+            });
+            res.redirect('/');
+        });
     });
 };
 

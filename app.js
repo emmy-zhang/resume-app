@@ -132,7 +132,12 @@ app.get('/jobs/create', passportConfig.isAuthenticated, jobController.getJobsCre
 app.post('/jobs/create', passportConfig.isAuthenticated, jobController.postJobsCreate);
 app.get('/jobs/:id', passportConfig.isAuthenticated, jobController.getJob);
 app.post('/jobs/:id', passportConfig.isAuthenticated, jobController.postJob);
+app.get('/jobs/:id/apply', passportConfig.isAuthenticated, jobController.getJobApply);
+app.post('/jobs/:id/apply', passportConfig.isAuthenticated, jobController.postJobApply);
 app.post('/jobs/:id/delete', passportConfig.isAuthenticated, jobController.deleteJob);
+app.get('/user/:id', passportConfig.isAuthenticated, userController.getUser);
+app.post('/user/:id/connect', passportConfig.isAuthenticated, userController.postConnectUser);
+app.post('/user/:id/disconnect', passportConfig.isAuthenticated, userController.postDisconnectUser);
 
 // OAuth authentication routes. (Sign in)
 app.get('/auth/facebook', passport.authenticate('facebook', {
