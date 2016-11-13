@@ -611,8 +611,10 @@ exports.postDisconnectUser = (req, res, next) => {
             return res.redirect('back');
         }
         var index = -1;
+        console.log(userToDisconnect);
         for (var i = 0; i < req.user.contacts.length; i++) {
-            if (req.user.contacts[i].id == userToDisconnect) {
+            console.log(req.user.contacts[i]);
+            if (req.user.contacts[i].id == userToDisconnect.id) {
                 index = i;
                 break;
             }
