@@ -2,7 +2,7 @@ extends layout
 
 block content
     body
-        .container
+      .container
         if !user
             div.contentHome.container-fluid
                 h1.text-center Spend more time connecting and less time with papers
@@ -22,7 +22,42 @@ block content
                         li To reach students who have similar skillsets to the job needs
                         li To easily find matches to students based on resume information
         else
-            if user.__t
+            if (user.__t == 'applicant')
+                div.contentHome.container-fluid
+                    h1.text-center Welcome, #{user.profile.firstName}!
+                    h2.text-center Check out your updated dashboard:
+                div
+                    .col-md-5.col-md-offset-1
+                        div.contactRequestsDashboard
+                            h2.text-center New contact requests:
+                            ul
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                        div.contactRequestsDashboard
+                            h2.text-center Your skills:
+                            div
+                              .col-sm-3.col-sm-offset-1
+                                
+
+                    .col-md-5
+                        div.currentContactsDashboard
+                            h2.text-center Current Contacts
+                            ul
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+
+            else
+              if (user.__t == 'recruiter')
                 div.contentHome.container-fluid
                     h1.text-center Welcome, #{user.profile.firstName}!
                     h2.text-center Checkout your updated dashboard:
@@ -65,7 +100,8 @@ block content
                                     button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
                                 li {Company Name} {Recruiter} {Company Match Percentage}
                                     button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-            else
+
+              else
                 h1 Please select your account type.
                 form.form-horizontal(action='/account/type', method='POST')
                     input(type='hidden', name='_csrf', value=_csrf)

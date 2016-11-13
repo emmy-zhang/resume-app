@@ -163,8 +163,8 @@ userSchema.methods.identicon = function(size) {
 };
 
 const User = mongoose.model('User', userSchema);
-const Applicant = User.discriminator('Applicant', applicantSchema);
-const Recruiter = User.discriminator('Recruiter', recruiterSchema);
+const Applicant = User.discriminator('applicant', applicantSchema);
+const Recruiter = User.discriminator('recruiter', recruiterSchema);
 
 module.exports = {
     User,
