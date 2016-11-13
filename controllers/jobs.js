@@ -10,6 +10,7 @@ const multerS3 = require('multer-s3');
 const User = require('../models/User').User;
 const Applicant = require('../models/User').Applicant;
 const Recruiter = require('../models/User').Recruiter;
+const Job = require('../models/Job');
 
 const config = new AWS.Config({
     accessKeyId: process.env.S3_ID,
@@ -55,10 +56,13 @@ exports.postJobsCreate = (req, res, next) => {
         owner: req.user._id
     });
 
+    console.log(job);
+    console.log(JSON.stringify(job));
+
     job.save((err) => {
         if (err) { return next(err); }
-        User.findByIdAndUpdate(req.user._id, {
-            $push: { openings: { name: job.name, id: job._id } }
+        Recruiter.findByIdAndUpdate(req.user._id, {
+            $push: { 'openings': { name: job.name, id: job._id } }
         }, { 'new': true}, (err) => {
             if (err) { return next(err); }
             return res.redirect('/jobs/' + job._id);

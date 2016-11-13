@@ -28,7 +28,7 @@ block content
                     i.fa.fa-pencil
                     | Update Job
 
-    if (job.owner === user._id || event.recruiters.indexOf(user.id) !== -1)
+    if (job.owner === user._id || job.recruiters.indexOf(user.id) !== -1)
         .page-header
             h3 Delete Job
 
