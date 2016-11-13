@@ -72,65 +72,11 @@ block content
                     .form-group
                         label.col-sm-3.control-label(for='type') User Type
                         .col-sm-6
-                          select(name='type')
-                            option(value='applicant') Applicant
-                            option(value='recruiter') Recruiter
+                            select(name='type')
+                                option(value='applicant') Applicant
+                                option(value='recruiter') Recruiter
                     .form-group
                         .col-sm-offset-3.col-sm-6
                             button.btn.btn-success(type='submit')
                                 i.fa.fa-user-plus
                                 | Update
-          else
-              if user.__t
-                  div.contentHome.container-fluid
-                      h1.text-center Welcome, #{user.profile.firstName}!
-                      h2.text-center Check out your updated dashboard:
-                  div
-                      .col-md-5.col-md-offset-1
-                          div.contactRequestsDashboard
-                              h2.text-center New contact requests:
-                              ul
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                          div.contactRequestsDashboard
-                              h2.text-center New contact requests:
-                              ul
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                      .col-md-5
-                          div.currentContactsDashboard
-                              h2.text-center Current Contacts
-                              ul
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                          div.currentContactsDashboard
-                              h2.text-center Current Contacts
-                              ul
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                else
-                    h1 Please select your account type.
-                    form.form-horizontal(action='/account/type', enctype="multipart/form-data", method='POST')
-                        input(type='hidden', name='_csrf', value=_csrf)
-                        .form-group
-                            label.col-sm-3.control-label(for='name') Name
-                            .col-sm-3
-                                input.form-control(type='text', name='firstName', id='firstName', placeholder='First', value='#{user.profile.firstName}')
-                            .col-sm-3
-                                input.form-control(type='text', name='lastName', id='lastName', placeholder='Last', value='#{user.profile.lastName}')
