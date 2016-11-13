@@ -55,7 +55,7 @@ exports.postJobsCreate = (req, res, next) => {
         skills: req.body.skills.split(/[ ,]+/),
         owner: {
             id: req.user._id,
-            name: req.user.firstName + " " + req.user.lastName
+            name: req.user.profile.firstName + " " + req.user.profile.lastName
         },
         recruiters: [req.user._id]
     });
@@ -116,7 +116,7 @@ exports.postJob = (req, res) => {
         job.company = req.body.company;
         job.skills = req.body.skills.split(/[ ,]+/);
         job.owner.id = req.user._id;
-        job.owner.name = req.user.firstName + " " + req.user.lastName;
+        job.owner.name = req.user.profile.firstName + " " + req.user.profile.lastName;
         job.save((err) => {
             if (err) {
                 return next(err);
@@ -206,7 +206,10 @@ exports.postJobApply = (req, res) => {
                 });
                 res.redirect('back');
             }
-            job.applicants.push(req.user.id);
+            job.applicants.push({
+                name: req.user.profile.firstName + " " + req.user.profile.lastName,
+                id: req.user.id
+            });
             job.save((err) => {
                 if (err) {
                     return next(err);

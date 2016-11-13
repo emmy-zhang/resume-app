@@ -582,7 +582,7 @@ exports.postConnectUser = (req, res, next) => {
             });
             return res.redirect('back');
         }
-        user.contacts.push(userToConnect._id);
+        user.contacts.push({name: userToConnect.profile.firstName + " " + userToConnect.profile.lastName, id: userToConnect._id});
         user.save((err) => {
             if (err) {
                 return next(err);
@@ -611,7 +611,13 @@ exports.postDisconnectUser = (req, res, next) => {
             });
             return res.redirect('back');
         }
-        const index = user.contacts.indexOf(userToDisconnect);
+        var index = -1;
+        for (var i = 0; i < user.contacts.length; i++) {
+            if (users.contacts[i].id == userToDisconnect) {
+                index = i;
+                break;
+            }
+        }
         if (index == -1) {
             req.flash('errors', {
                 msg: 'User is not a contact.'
