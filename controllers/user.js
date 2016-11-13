@@ -355,7 +355,7 @@ function uploadToS3(file, fileName, callback) {
         Bucket: process.env.S3_BUCKET,
         Body: file.buffer,
         Key: fileName.toString(),
-        ContentType: 'application/octet-stream',
+        ContentType: 'application/pdf',
         ACL: 'public-read'
     }).send(callback);
 }
