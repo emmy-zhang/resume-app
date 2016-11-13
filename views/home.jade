@@ -39,15 +39,13 @@ block content
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
                                 li {Company Name} {Recruiter} {Company Match Percentage}
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                        div.contactRequestsDashboard.jobOpeningSection
+                        div.contactRequestsDashboard
                             h2.text-center Your skills:
                             ul
                                 li {Company Name} {Recruiter} {Company Match Percentage}
                                     button.btn.btn-default.btn-xs.btn-success(type='button') Connect
                                     input.form-control(type='skills', name='skills', id='skillsToAdd', placeholder='Skills (separate by commas)', autofocus, required)
                                     button.btn.btn-secondary(type='button') Add Skill
-
-
 
                     .col-md-5
                         div.currentContactsDashboard
@@ -70,15 +68,15 @@ block content
                         div.contactRequestsDashboard
                           h2.text-center Job Openings:
                             if user.openings.length > 0
-                                h2 You have listed #{user.openings.length} openings.
-                                ul
+                                p You have listed #{user.openings.length} openings.
+                                ul.jobOpeningSection
                                     each opening in user.openings
                                         a(href='/jobs/' + opening.id)
                                             li= opening.name
                             else
                                 p You have not listed any job openings.
-
-                            button.btn.btn-default(type='button') Add Job Opening
+                            form(action="jobs/create", method='GET')
+                              button.btn.btn-default(type='submit') Add Job Opening
                     .col-md-5
                         div.currentContactsDashboard
                             h2.text-center Current Applicant Contacts
