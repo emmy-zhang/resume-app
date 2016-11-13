@@ -172,6 +172,13 @@ div.page-header {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
+#typeDropdown {
+  border: 1px solid #f0f0f0;
+  height: 40px;
+  color: #999;
+  background-color: #fff;
+}
+
 #applicant:active,
 #applicant:focus,
 #applicant:hover,
