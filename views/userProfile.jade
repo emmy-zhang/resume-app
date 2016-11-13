@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    body
+      .container
+        if (user.__t === "recruiter" && viewedUser.contacts.indexOf(user.id))
+          if !user.profile.picture
+              .form-group
+                  label.col-sm-3.control-label(for='identicon') Identicon
+                  .col-sm-4
+                      img(src="#{user.identicon()}", class='profile', width='60', height='60')
+          else
+              .form-group
+                  label.col-sm-3.control-label(for='picture') Picture
+                  .col-sm-4
+                      img(src="#{user.profile.picture}", class='profile', width='60', height='60')
+          p User type: #{user.__t}
+          p Name: #{user.profile.firstName} #{user.profile.lastName}
+          p Major: #{user.profile.major}
+          p Graduation Year: #{user.profile.graduationYear}
+          p Degree: #{user.profile.degree}
+          p School: #{user.profile.school}
+
+          p Skills: #{user.profile.school}
