@@ -1,0 +1,33 @@
+extends layout
+
+block content
+    body
+      .container
+        h1 Create a new job opening
+        form.form-horizontal(action='/jobs/create', method='POST')
+            input(type='hidden', name='_csrf', value=_csrf)
+            .form-group
+              label.col-sm-3.control-label(for='name') Job Name
+              .col-sm-6
+                  input.form-control(type='name', name='name', id='name', placeholder='Job Name', autofocus, required)
+            .form-group
+              label.col-sm-3.control-label(for='company') Company
+              .col-sm-6
+                input.form-control(type='company', name='company', id='company', placeholder='Company', autofocus, required)
+            .form-group
+              label.col-sm-3.control-label(for='description') Description
+              .col-sm-6
+                  input.form-control(type='description', name='description', id='description', placeholder='Description', autofocus, required)
+            .form-group
+              label.col-sm-3.control-label(for='location') Location
+              .col-sm-6
+                  input.form-control(type='location', name='location', id='location', placeholder='Location', autofocus, required)
+            .form-group
+              label.col-sm-3.control-label(for='skills') Skills
+              .col-sm-6
+                  input.form-control(type='skills', name='skills', id='skills', placeholder='Skills (separate by commas)', autofocus, required)
+            .form-group
+              .col-sm-offset-3.col-sm-6
+                  button.btn.btn-success(type='submit')
+                      i.fa.fa-user-plus
+                      | Add Job

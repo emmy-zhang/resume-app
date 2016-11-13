@@ -43,7 +43,12 @@ block content
                             h2.text-center Your skills:
                             div
                               .col-sm-3.col-sm-offset-1
-                                
+
+                                .col-lg-6
+                                  .input-group
+                                    input.form-control(type='text', placeholder='Add a new skill')
+                                    span.input-group-btn
+                                      button.btn.btn-secondary(type='button') Add
 
                     .col-md-5
                         div.currentContactsDashboard
@@ -64,6 +69,7 @@ block content
                 div
                     .col-md-5.col-md-offset-1
                         div.contactRequestsDashboard
+                          h2.text-center Job Openings:
                             if user.openings.length > 0
                                 h2 You have listed #{user.openings.length} openings.
                                 ul
@@ -72,42 +78,17 @@ block content
                                             li= opening.name
                             else
                                 p You have not listed any job openings.
-                        div.contactRequestsDashboard
-                            h2.text-center New contact requests:
-                            ul
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                        div.contactRequestsDashboard
-                            h2.text-center New contact requests:
-                            ul
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                button.btn.btn-default(type='button') Add Job Opening
+
                     .col-md-5
                         div.currentContactsDashboard
-                            h2.text-center Current Contacts
+                            h2.text-center Current Applicant Contacts
                             ul
-                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                li {Applicant Name} {School} {Match Percentage}
                                     button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                li {Applicant Name} {School} {Match Percentage}
                                     button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                        div.currentContactsDashboard
-                            h2.text-center Current Contacts
-                            ul
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                li {Company Name} {Recruiter} {Company Match Percentage}
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                li {Company Name} {Recruiter} {Company Match Percentage}
+                                li {Applicant Name} {School} {Match Percentage}
                                     button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
 
               else
