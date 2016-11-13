@@ -53,7 +53,8 @@ exports.postJobsCreate = (req, res, next) => {
         location: req.body.location,
         company: req.body.company,
         skills: req.body.skills.split(/[ ,]+/),
-        owner: req.user._id
+        owner: req.user._id,
+        recruiters: [req.user._id]
     });
 
     console.log(job);
@@ -91,11 +92,13 @@ exports.getJob = (req, res) => {
 exports.postJob = (req, res) => {
     Job.findById(req.params.id, (err, job) => {
         if (err) { return next(err); }
-        job.name = req.body.name,
-        job.description = req.body.description || '',
-        job.location = req.body.location,
-        job.company = req.body.company,
-        job.skills = req.body.skills.split(/[ ,]+/)
+        job.name = req.body.name;
+        job.description = req.body.description || '';
+        job.location = req.body.location;
+        job.company = req.body.company;
+        job.skills = req.body.skills.split(/[ ,]+/);
+        job.owner = req.user._id;
+        //job.recruiters = [req.user._id]
         job.save((err) => {
             if (err) { return next(err); }
             req.flash('success', { msg: 'Job opening information has been updated.' });
@@ -116,7 +119,7 @@ exports.deleteJob = (req, res) => {
     Job.remove({ _id: id }, (err) => {
         if (err) { return next(err); }
         req.flash('info', { msg: 'The job opening has been deleted.' });
-        User.update({ _id: req.user._id }, { $pull: { openings: { id: id } } }, (err) => {
+        Recruiter.update({ _id: req.user._id }, { $pull: { openings: { id: id } } }, (err) => {
             if (err) { return next(err); }
             return res.redirect('/');
         });
