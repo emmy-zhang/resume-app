@@ -42,7 +42,7 @@ block content
                 .col-sm-offset-3.col-sm-4
                     if (job.owner === user._id)
                         p You are the owner of this job opening.
-                    else if (event.recruiters.indexOf(user.id) !== -1)
+                    else if (job.recruiters.indexOf(user.id) !== -1)
                         p You are a recruiter for this job opening.
                     button.btn.btn-danger(type='submit')
                         i.fa.fa-trash
