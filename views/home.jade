@@ -65,9 +65,18 @@ block content
               if (user.__t == 'recruiter')
                 div.contentHome.container-fluid
                     h1.text-center Welcome, #{user.profile.firstName}!
-                    h2.text-center Checkout your updated dashboard:
+                    h2.text-center Check out your updated dashboard:
                 div
                     .col-md-5.col-md-offset-1
+                        div.contactRequestsDashboard
+                            if user.openings.length > 0
+                                h2 You have listed #{user.openings.length} openings.
+                                ul
+                                    each opening in user.openings
+                                        a(href='/jobs/' + opening.id)
+                                            li= opening.name
+                            else
+                                p You have not listed any job openings.
                         div.contactRequestsDashboard
                             h2.text-center New contact requests:
                             ul
