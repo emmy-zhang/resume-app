@@ -4,6 +4,8 @@ const identicon = require('identicon.js');
 const mongoose = require('mongoose');
 const path = require('path');
 
+const Job = require('Job');
+
 const options = {
     discriminatorKey: 'type'
 };
@@ -45,7 +47,8 @@ const userSchema = new mongoose.Schema({
         }
     },
 }, {
-    timestamps: true, options
+    timestamps: true,
+    options
 });
 
 const applicantSchema = new mongoose.Schema({
@@ -76,9 +79,14 @@ const applicantSchema = new mongoose.Schema({
         interests: [{
             type: String
         }]
-    }
+    },
+    applications: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Job'
+    }],
 }, {
-    timestamps: true, options
+    timestamps: true,
+    options
 });
 
 const recruiterSchema = new mongoose.Schema({
@@ -97,9 +105,14 @@ const recruiterSchema = new mongoose.Schema({
         interests: [{
             type: String
         }]
-    }
+    },
+    openings: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Job'
+    }],
 }, {
-    timestamps: true, options
+    timestamps: true,
+    options
 });
 
 /**
