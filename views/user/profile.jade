@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
     body
@@ -11,7 +11,7 @@ block content
                       img(src="#{user.identicon()}", class='profile', width='60', height='60')
           else
               .form-group
-                  label.col-sm-3.control-label(for='picture') Picture
+                  label.col-sm-3.control-label(for='picture')
                   .col-sm-4
                       img(src="#{user.profile.picture}", class='profile', width='60', height='60')
           p User type: #{user.__t}

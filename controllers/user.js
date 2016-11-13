@@ -553,7 +553,7 @@ exports.getUser = (req, res, next) => {
             });
             return res.redirect('back');
         }
-        res.render('user/id', {
+        res.render('user/profile', {
             title: 'User Profile',
             viewedUser: user
         });
