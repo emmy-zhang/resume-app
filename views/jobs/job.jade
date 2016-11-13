@@ -9,23 +9,23 @@ block content
         .form-group
           label.col-sm-3.control-label(for='name') Job Name
           .col-sm-6
-              input.form-control(type='name', name='name', id='name', placeholder='Job Name', autofocus, required)
+              input.form-control(type='name', name='name', id='name', placeholder='Job Name', value='#{job.name}' autofocus, required)
         .form-group
           label.col-sm-3.control-label(for='company') Company
           .col-sm-6
-            input.form-control(type='company', name='company', id='company', placeholder='Company', autofocus, required)
+            input.form-control(type='company', name='company', id='company', placeholder='Company', value='#{job.company}' autofocus, required)
         .form-group
           label.col-sm-3.control-label(for='description') Description
           .col-sm-6
-              input.form-control(type='description', name='description', id='description', placeholder='Description', autofocus, required)
+              input.form-control(type='description', name='description', id='description', placeholder='Description', value='#{job.description}' autofocus, required)
         .form-group
           label.col-sm-3.control-label(for='location') Location
           .col-sm-6
-              input.form-control(type='location', name='location', id='location', placeholder='Location', autofocus, required)
+              input.form-control(type='location', name='location', id='location', placeholder='Location', value='#{job.location}' autofocus, required)
         .form-group
           label.col-sm-3.control-label(for='skills') Skills
           .col-sm-6
-              input.form-control(type='skills', name='skills', id='skills', placeholder='Skills (separate by commas)', autofocus, required)
+              input.form-control(type='skills', name='skills', id='skills', placeholder='Skills (separate by commas)', value='#{job.skills}' autofocus, required)
         .form-group
             .col-sm-offset-3.col-sm-4
                 button.btn.btn.btn-primary(type='submit')
