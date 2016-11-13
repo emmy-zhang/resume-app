@@ -106,6 +106,7 @@ exports.postSignup = (req, res, next) => {
     req.sanitize('email').normalizeEmail({
         remove_dots: false
     });
+    console.log(req.body);
 
     const errors = req.validationErrors();
 
