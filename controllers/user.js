@@ -238,7 +238,6 @@ exports.postAccountType = (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            req.logout();
             newUser.save((err) => {
                 if (err) {
                     if (err.code === 11000) {
@@ -249,10 +248,15 @@ exports.postAccountType = (req, res, next) => {
                     }
                     return next(err);
                 }
-                req.flash('success', {
-                    msg: 'Your account type has been updated.'
+                req.logIn(user, (err) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    req.flash('success', {
+                        msg: 'Your account type has been updated.'
+                    });
+                    res.redirect('/');
                 });
-                res.redirect('/');
             });
         });
 
