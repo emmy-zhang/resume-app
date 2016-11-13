@@ -211,8 +211,8 @@ exports.postUpdateProfile = (req, res, next) => {
         console.log(req.file);
 
         if (req.file) {
-            const filename = req.user.id + "";
-            uploadToS3(req.file, req.user.id, function(err, data) {
+            const filename = req.user.id + ".pdf";
+            uploadToS3(req.file, filename, function(err, data) {
                 console.log('data: ' + JSON.stringify(data));
                 if (err) {
                     console.error(err);

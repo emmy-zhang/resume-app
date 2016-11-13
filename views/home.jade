@@ -2,7 +2,8 @@ extends layout
 
 block content
     body
-        if(!user)
+        .container
+        if !user
             div.contentHome.container-fluid
                 h1.text-center Spend more time connecting and less time with papers
                 h2.text-center A resume sharing web app that allows:
@@ -21,65 +22,48 @@ block content
                         li To reach students who have similar skillsets to the job needs
                         li To easily find matches to students based on resume information
           else
-              div.contentHome.container-fluid
-                  h1.text-center Welcome, #{user.profile.firstName}!
-                  h2.text-center Checkout your updated dashboard:
-              div
-                  .col-md-5.col-md-offset-1
-                      div.contactRequestsDashboard
-                          h2.text-center New contact requests:
-                          ul
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                      div.contactRequestsDashboard
-                          h2.text-center New contact requests:
-                          ul
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                  .col-md-5
-                      div.currentContactsDashboard
-                          h2.text-center Current Contacts
-                          ul
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                      div.currentContactsDashboard
-                          h2.text-center Current Contacts
-                          ul
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                              li {Company Name} {Recruiter} {Company Match Percentage}
-                                  button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                              //
-                                  div
-                                      .col-md-5.col-md-offset-1
-                                          div.contactRequestsDashboard
-                                              h2.text-center New contact requests:
-                                              ul
-                                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
-                                      .col-md-5
-                                          div.currentContactsDashboard
-                                              h2.text-center Current Contacts
-                                              ul
-                                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                                  li {Company Name} {Recruiter} {Company Match Percentage}
-                                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+              if user.__t
+                  div.contentHome.container-fluid
+                      h1.text-center Welcome, #{user.profile.firstName}!
+                      h2.text-center Checkout your updated dashboard:
+                  div
+                      .col-md-5.col-md-offset-1
+                          div.contactRequestsDashboard
+                              h2.text-center New contact requests:
+                              ul
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                          div.contactRequestsDashboard
+                              h2.text-center New contact requests:
+                              ul
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-success(type='button') Connect
+                      .col-md-5
+                          div.currentContactsDashboard
+                              h2.text-center Current Contacts
+                              ul
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                          div.currentContactsDashboard
+                              h2.text-center Current Contacts
+                              ul
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                                  li {Company Name} {Recruiter} {Company Match Percentage}
+                                      button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                else
+                    h1 No type

@@ -76,13 +76,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
     if (req.path === '/account/profile') {
         next();
     } else {
         lusca.csrf()(req, res, next);
     }
-});*/
+});
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.use((req, res, next) => {
@@ -119,7 +119,6 @@ app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConfig.isAuthenticated, upload.single('resume'), userController.postUpdateProfile);
-//app.get('/account/sign-s3', passportConfig.isAuthenticated, userController.signS3);
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);

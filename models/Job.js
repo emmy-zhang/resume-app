@@ -3,22 +3,21 @@ const User = require('../models/User').User;
 const Applicant = require('../models/User').Applicant;
 const Recruiter = require('../models/User').Recruiter;
 
-const applicantSchema = new mongoose.Schema({
-    userID: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    //times: [{time: Date, value: Boolean}]
+const jobApplicantSchema = new mongoose.Schema({
+    userID: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Applicant' }],
+    qualifications: [ String ]
 });
 
-const eventSchema = new mongoose.Schema({
+const jobSchema = new mongoose.Schema({
     name: String,
     description: String,
     location: String,
-    times: [{ time: Date, value: Boolean }],
-    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    planners: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    guests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Guest' }]
+    company: String,
+    applicants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'JobApplicant' }],
+    recruiters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Recruiters' }]
 }, { timestamps: true });
 
-const Guest = mongoose.model('Guest', guestSchema);
-const Event = mongoose.model('Event', eventSchema);
+const JobApplicant = mongoose.model('JobApplicant', jobApplicantSchema);
+const Job = mongoose.model('Job', jobSchema);
 
-module.exports = Event;
+module.exports = Job;
