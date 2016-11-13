@@ -4,7 +4,7 @@ const identicon = require('identicon.js');
 const mongoose = require('mongoose');
 const path = require('path');
 
-const Job = require('Job');
+const Job = require('../models/Job');
 
 const options = {
     discriminatorKey: 'type'
