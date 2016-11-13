@@ -83,7 +83,7 @@ const applicantSchema = new mongoose.Schema({
 
 const recruiterSchema = new mongoose.Schema({
     profile: {
-        organzation: {
+        organization: {
             type: String,
             default: ''
         },
