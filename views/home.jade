@@ -59,7 +59,6 @@ block content
                                     each request in user.contactRequests
                                         a(href='/user/' + request.id + '/connect')
                                             li #{request.name}
-
                             else
                                 p You have no contact requests.
                     .col-md-5
@@ -96,13 +95,16 @@ block content
                     .col-md-5
                         div.currentContactsDashboard
                             h2.text-center Current Applicant Contacts
-                            ul
-                                li {Applicant Name} {School} {Match Percentage} &nbsp;
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                li {Applicant Name} {School} {Match Percentage} &nbsp;
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
-                                li {Applicant Name} {School} {Match Percentage} &nbsp;
-                                    button.btn.btn-default.btn-xs.btn-danger(type='button') Remove Contact
+                            if user.contacts.length > 0
+                                p You have #{user.contacts.length} contacts.
+                                ul.jobOpeningSection
+                                    each contact in user.contacts
+                                        form(action='/user/' + contact.id + '/disconnect', method='POST')
+                                            li
+                                                label(for='id') #{contact.name}
+                                                input.btn.btn-default.btn-xs.btn-danger(type='submit', value='#{contact.id}', text='Remove Contact')
+                            else
+                                p You have no contacts.
                         div.currentContactsDashboard
                             h2.text-center Applicants
                             if users.length > 0
