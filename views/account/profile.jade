@@ -51,6 +51,45 @@ block content
     if (user.__t === 'applicant')
         .page-header
             h3 Career Information
+        form.form-horizontal(action='/account/profile', enctype="multipart/form-data", method='POST')
+            input(type='hidden', name='_csrf', value=_csrf)
+            .form-group
+                label.col-sm-3.control-label(for='major') Major
+                .col-sm-6
+                    input.form-control(type='text', name='major', id='major', value='#{user.profile.major}')
+            .form-group
+                label.col-sm-3.control-label(for='graduationYear') Graduation Year
+                .col-sm-6
+                    input.form-control(type='text', name='graduationYear', id='graduationYear', value='#{user.profile.graduationYear}')
+            .form-group
+                label.col-sm-3.control-label(for='degree') Degree
+                .col-sm-6
+                    input.form-control(type='text', name='degree', id='degree', value='#{user.profile.degree}')
+            .form-group
+                label.col-sm-3.control-label(for='school') School
+                .col-sm-6
+                    input.form-control(type='text', name='school', id='school', value='#{user.profile.school}')
+            .form-group
+                label.col-sm-3.control-label(for='resume') Resume
+                .col-sm-6
+                    input.form-control(type='text', name='resume', id='resume', value='#{user.profile.resume}')
+            .form-group
+                label.col-sm-3.control-label(for='skills') Skills
+                .col-sm-6
+                    input.form-control(type='text', name='skills', id='skills', value='#{user.profile.skills}')
+    else
+        .page-header
+            h3 Recruiter Information
+        form.form-horizontal(action='/account/profile', enctype="multipart/form-data", method='POST')
+            input(type='hidden', name='_csrf', value=_csrf)
+            .form-group
+                label.col-sm-3.control-label(for='organization') Organization
+                .col-sm-6
+                    input.form-control(type='text', name='organization', id='organization', value='#{user.profile.organization}')
+            .form-group
+                label.col-sm-3.control-label(for='title') Title
+                .col-sm-6
+                    input.form-control(type='text', name='title', id='title', value='#{user.profile.title}')
 
     .page-header
         h3 Change Password
